@@ -1,8 +1,5 @@
 function solution(numbers) {
     var answer = [];
-    for (a of numbers) {
-        a = a * 2;
-        answer.push(a);
-    }
+    numbers.forEach(n => answer.push(n*2));
     return answer;
 }
