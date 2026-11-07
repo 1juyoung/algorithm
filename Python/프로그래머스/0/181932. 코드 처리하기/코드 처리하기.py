@@ -20,6 +20,6 @@ def solution(code):
                 if i % 2 == 0:
                     answer.append(code[i])
 
-    if len(answer) == 0:
-        return "EMPTY"
-    return "".join(answer)
+    # if len(answer) == 0:
+    #     return "EMPTY"
+    return "".join(answer) or "EMPTY"
