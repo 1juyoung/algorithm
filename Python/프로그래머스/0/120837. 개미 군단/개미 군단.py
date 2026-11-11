@@ -5,8 +5,4 @@ def solution(hp):
     hp = hp % 5
     answer = answer + (hp // 3)
     hp = hp % 3
-    if hp == 2:
-        return answer + 2
-    if hp == 1:
-        return answer + 1
-    return answer
+    return answer + hp
