@@ -376,11 +376,17 @@ def main() -> int:
     ap.add_argument("--site-dir", required=True, help="gh-pages 작업 폴더")
     ap.add_argument("--base-url", default="", help="예: https://1juyoung.github.io/algorithm")
     ap.add_argument("--dry-run", action="store_true", help="Gemini를 호출하지 않고 글 형태만 확인")
+    ap.add_argument("--skip-if-exists", action="store_true", help="그날 글이 이미 있으면 아무것도 하지 않음(재시도 실행용)")
     args = ap.parse_args()
 
     day = (dt.date.fromisoformat(args.date) if args.date.strip()
            else dt.datetime.now(KST).date() - dt.timedelta(days=1))
     repo = Path(args.repo_dir).resolve()
+    post = Path(args.site_dir) / "_posts" / f"{day.isoformat()}-daily-review.md"
+    if args.skip_if_exists and post.exists():
+        print(f"{day} 글이 이미 있어서 건너뛰어요.", file=sys.stderr)
+        write_output(skip="1", post_path="", count="", title="", body="", url="")
+        return 0
     problems = find_problems(repo, day)
     label = f"{day.month}/{day.day}"
     print(f"{day}: {len(problems)}문제", file=sys.stderr)
@@ -423,8 +429,6 @@ def main() -> int:
         print("모든 문제의 분석이 실패해서 글을 올리지 않아요. 위 오류를 확인하세요.", file=sys.stderr)
         return 1
 
-    site = Path(args.site_dir)
-    post = site / "_posts" / f"{day.isoformat()}-daily-review.md"
     post.parent.mkdir(parents=True, exist_ok=True)
     post.write_text(render_post(day, problems), encoding="utf-8")
 

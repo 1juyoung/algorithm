@@ -3,6 +3,8 @@ name: Daily code review
 on:
   schedule:
     - cron: "7 15 * * *" # 매일 00:07 KST (UTC 15:07), 전날 푼 문제를 분석
+    - cron: "7 18 * * *" # 03:07 KST 재시도 (Gemini 과부하로 실패했을 때만 실제로 동작)
+    - cron: "7 22 * * *" # 07:07 KST 재시도
   workflow_dispatch:
     inputs:
       date:
@@ -52,7 +54,8 @@ jobs:
           python .github/scripts/daily_review.py \
             --date "${{ inputs.date }}" \
             --site-dir site \
-            --base-url "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}"
+            --base-url "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}" \
+            ${{ github.event_name == 'schedule' && '--skip-if-exists' || '' }}
 
       - name: Publish to gh-pages
         if: steps.review.outputs.post_path != ''
@@ -67,7 +70,10 @@ jobs:
           fi
 
       - name: Notify (FCM)
-        if: env.HAS_FCM == 'true'
+        # 재시도 실행에서 "푼 문제 없음" 알림이 여러 번 가지 않도록, 그 알림은 00:07 실행에서만 보낸다
+        if: >-
+          env.HAS_FCM == 'true' && steps.review.outputs.skip != '1' &&
+          (steps.review.outputs.count != '0' || github.event_name != 'schedule' || github.event.schedule == '7 15 * * *')
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           FCM_TOPIC: algo
