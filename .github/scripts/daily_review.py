@@ -186,6 +186,8 @@ RESPONSE_SCHEMA = {
     "type": "OBJECT",
     "properties": {
         "problem_summary": {"type": "STRING"},
+        "intended_approach": {"type": "STRING"},
+        "approach_match": {"type": "BOOLEAN"},
         "verdict": {"type": "STRING", "enum": VERDICTS},
         "my_time": {"type": "STRING"},
         "best_time": {"type": "STRING"},
@@ -205,7 +207,7 @@ RESPONSE_SCHEMA = {
         "better_summary": {"type": "STRING"},
         "better_code": {"type": "STRING"},
     },
-    "required": ["problem_summary", "verdict", "my_time", "best_time", "my_space", "best_space", "complexity_note",
+    "required": ["problem_summary", "intended_approach", "approach_match", "verdict", "my_time", "best_time", "my_space", "best_space", "complexity_note",
                  "summary", "good_points", "comments", "weaknesses", "better_summary", "better_code"],
 }
 
@@ -222,7 +224,11 @@ def build_prompt(p: Problem) -> str:
   / "더 쉬운 풀이 있음"(내장 함수·공식·자료구조로 훨씬 단순하게 풀 수 있는데 어렵게 풀었음)
 - my_time, best_time, my_space, best_space: 빅오 표기만 (예: "O(N log N)"). 설명은 넣지 마.
 - complexity_note: 내 풀이 복잡도가 왜 그런지, 입력 최대 크기에서 대략 몇 번 연산인지 2~3문장
-- summary: 내 풀이가 어떤 방식인지 1~2문장
+- intended_approach: 이 문제를 푸는 정석 방법을 "이 문제는 ~로 푸는 문제야." 형태로 1~2문장.
+  어떤 알고리즘·자료구조를 쓰는지, 핵심 아이디어가 무엇인지 포함해.
+- approach_match: 제출 코드가 intended_approach와 같은 방식(또는 그만큼 좋은 방식)으로 풀었으면 true, 아니면 false
+- summary: approach_match가 true면 "맞아, ~로 풀었어."로 시작하고, false면 "하지만 너는 ~로 풀었어."로 시작해서
+  실제로 어떻게 풀었는지와 정석과 무엇이 다른지 1~2문장
 - good_points: 잘한 점 1~3개, 짧고 구체적으로
 - comments: 고칠 점 0~4개. title은 짧은 제목, body는 1~2문장. 시간 복잡도, 불필요한 코드, 경계값,
   입력 처리(예: split(" ") 대신 split()), 제출하면 안 되는 디버그 코드(예: sys.stdin = open(...)) 등. 없으면 빈 배열.
@@ -300,9 +306,11 @@ def call_gemini(prompt: str, api_key: str, model: str, retries: int = 2) -> dict
 
 
 def fake_analysis(p: Problem) -> dict:
-    return {"problem_summary": "드라이런용 문제 요약이야.", "verdict": "개선 가능", "my_time": "O(N·K)",
+    return {"problem_summary": "드라이런용 문제 요약이야.",
+            "intended_approach": "이 문제는 슬라이딩 윈도우로 푸는 문제야.", "approach_match": False,
+            "verdict": "개선 가능", "my_time": "O(N·K)",
             "best_time": "O(N)", "my_space": "O(K)", "best_space": "O(1)",
-            "complexity_note": "드라이런이라 실제 분석은 하지 않았어.", "summary": "드라이런 요약이야.",
+            "complexity_note": "드라이런이라 실제 분석은 하지 않았어.", "summary": "하지만 너는 매번 구간 합을 다시 구했어.",
             "good_points": ["입력을 빠르게 받았어"],
             "comments": [{"title": "겹치는 구간을 다시 더함", "body": "빠지는 값 하나, 들어오는 값 하나만 반영하면 돼."}],
             "weaknesses": [{"tag": "시간복잡도 계산", "reason": "제출 전에 최악의 연산 횟수를 계산하지 않았어."}],
@@ -391,7 +399,8 @@ def main() -> int:
                 models.insert(0, used)
         except RuntimeError as e:
             print(f"[{p.title}] {e}", file=sys.stderr)
-            p.analysis = {"verdict": "분석 실패", "problem_summary": "", "my_time": "-", "best_time": "-",
+            p.analysis = {"verdict": "분석 실패", "problem_summary": "", "intended_approach": "",
+                          "approach_match": True, "my_time": "-", "best_time": "-",
                           "my_space": "-", "best_space": "-", "complexity_note": "",
                           "summary": "분석 중 오류가 나서 다시 확인이 필요해.", "good_points": [], "comments": [],
                           "weaknesses": [], "better_summary": "", "better_code": ""}

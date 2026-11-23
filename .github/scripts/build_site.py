@@ -189,6 +189,15 @@ def render_post(p: dict) -> str:
         better = (f'<section><h2>더 나은 풀이</h2><p>{escape(a(p, "better_summary"))}</p>'
                   f'{code_block(a(p, "better_code"), p.get("code_ext", ""), f"better · {best_t}")}</section>')
 
+    approach = (f'<div class="approach"><span class="label">푸는 방법</span>'
+                f'<p>{escape(a(p, "intended_approach"))}</p></div>' if a(p, "intended_approach") else "")
+    match = (p.get("analysis") or {}).get("approach_match", True)
+    judge = ""
+    if a(p, "summary"):
+        mark = ('<span class="judge-mark ok">✓ 방향 맞음</span>' if match
+                else '<span class="judge-mark no">✕ 다른 방식</span>')
+        judge = (f'<section class="judge {"ok" if match else "no"}"><div class="judge-head">'
+                 f'<h2>내 풀이는?</h2>{mark}</div><p>{escape(a(p, "summary"))}</p></section>')
     link = (f'<a class="ext" href="{escape(p["link"])}" target="_blank" rel="noopener">문제 보러 가기 ↗</a>'
             if p.get("link") else "")
     body = f"""<main class="container post">
@@ -197,7 +206,9 @@ def render_post(p: dict) -> str:
   <h1>{escape(p["title"])}</h1>
   <p class="summary">{escape(a(p, "problem_summary"))}</p>
   {link}
+  {approach}
   <section><h2>내 풀이</h2>{code_block(p.get("code", ""), p.get("code_ext", ""), "my solution")}</section>
+  {judge}
   <section class="card cx-card">
     <div class="cx-head"><span class="label">시간 복잡도</span>
       <span class="badge {VERDICT_CLASS.get(verdict, "warn")}">{escape(verdict)}</span></div>
@@ -205,7 +216,6 @@ def render_post(p: dict) -> str:
     {space}
     <p>{escape(a(p, "complexity_note"))}</p>
   </section>
-  <section><h2>내 풀이 요약</h2><p>{escape(a(p, "summary"))}</p></section>
   {two_col}
   {weak}
   {better}
@@ -293,6 +303,17 @@ border-bottom:1px solid var(--border);transition:background .15s}
 font:12px var(--mono);color:var(--muted-fg)}
 .hl pre{margin:0;padding:16px;overflow-x:auto;font:13.5px/1.75 var(--mono);background:var(--card)}
 .hl .linenos{display:inline-block;width:2.2em;margin-right:12px;color:#9aa1ad;text-align:right;user-select:none}
+.approach{margin-top:22px;padding:16px 18px;border-left:3px solid var(--primary);background:var(--card);
+border-radius:0 var(--r) var(--r) 0}
+.approach p{margin-top:4px;line-height:1.7;font-weight:500}
+.post section.judge{padding:18px 20px;border:1px solid var(--border);border-radius:var(--r);background:var(--card);
+margin-top:20px}
+.judge-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.judge-head h2{margin:0!important}
+.judge p{line-height:1.75}
+.judge-mark{font:500 12px var(--mono);padding:2px 8px;border-radius:3px}
+.judge-mark.ok{color:var(--primary);border:1px solid var(--primary)}
+.judge-mark.no{color:var(--fg);background:var(--hl)}
 .cx-card{padding:24px 26px}
 .cx-head{display:flex;justify-content:space-between;align-items:center}
 .label{font:12px var(--mono);color:var(--muted-fg);letter-spacing:.08em}
