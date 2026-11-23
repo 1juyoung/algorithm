@@ -23,6 +23,7 @@
   <h1>스택</h1>
   <p class="summary">push, pop, size, empty, top 명령 N개(N ≤ 10,000)를 처리하는 스택을 구현해.</p>
   <a class="ext" href="https://acmicpc.net/problem/10828" target="_blank" rel="noopener">문제 보러 가기 ↗</a>
+  <div class="approach"><span class="label">푸는 방법</span><p>이 문제는 리스트를 스택으로 쓰는 기본 자료구조 문제야. 명령이 최대 1만 개라 빠른 입출력까지 챙기는 게 포인트야.</p></div>
   <section><h2>내 풀이</h2><div class="code-card"><div class="code-head"><span>my solution</span><span>python</span></div><div class="hl"><pre><span></span><code><span class="linenos"> 1</span><span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">())</span>
 <span class="linenos"> 2</span><span class="n">l</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="linenos"> 3</span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
@@ -52,6 +53,7 @@
 <span class="linenos">27</span>            <span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 </code></pre></div>
 </div></section>
+  <section class="judge ok"><div class="judge-head"><h2>내 풀이는?</h2><span class="judge-mark ok">✓ 방향 맞음</span></div><p>맞아, 리스트의 append와 pop으로 스택을 처리했어. 다만 입출력 속도는 따로 챙기지 않았어.</p></section>
   <section class="card cx-card">
     <div class="cx-head"><span class="label">시간 복잡도</span>
       <span class="badge warn">개선 가능</span></div>
@@ -59,7 +61,6 @@
     <div class="space"><div><span class="label">내 공간</span><code>O(N)</code></div><div><span class="label">최선 공간</span><code>O(N)</code></div></div>
     <p>명령마다 append, pop, len이 모두 O(1)이라 전체 O(N)이야. 다만 input()과 print를 1만 번씩 부르면 파이썬에서는 느려질 수 있어. 실제 실행 시간도 220ms가 나왔어.</p>
   </section>
-  <section><h2>내 풀이 요약</h2><p>명령을 모두 리스트에 저장한 뒤, 리스트 s를 스택으로 써서 명령마다 바로 출력했어.</p></section>
   <div class="two-col"><section><h2>잘한 점</h2><ul class="plus"><li>파이썬 리스트의 append와 pop을 스택으로 정확히 썼어</li><li>빈 스택일 때 -1, 0, 1 처리를 빠짐없이 했어</li></ul></section><section><h2>코멘트</h2><div class="comment"><strong>대량 입력은 sys.stdin.readline</strong><p>명령이 1만 개라 input() 대신 sys.stdin.readline을 쓰면 훨씬 빨라.</p></div><div class="comment"><strong>출력은 모아서 한 번에</strong><p>결과를 리스트에 모았다가 &#x27;\n&#x27;.join으로 한 번에 출력하면 print 호출이 줄어.</p></div><div class="comment"><strong>map(str, ...)은 필요 없어</strong><p>split()의 결과는 이미 문자열이라 str로 바꿀 필요가 없어.</p></div><div class="comment"><strong>range(len(l)) 대신 직접 순회</strong><p>for cmd in l처럼 바로 돌면 l[i][0]처럼 인덱스를 반복해서 쓰지 않아도 돼.</p></div></section></div>
   <section><h2>이 문제에서 드러난 약점</h2><div class="card weak-table"><div class="weak-row"><span class="weak-tag">입력 처리</span><span>명령이 많은 문제에서 빠른 입출력을 쓰지 않았어.</span></div></div></section>
   <section><h2>더 나은 풀이</h2><p>sys.stdin.readline으로 명령을 바로 읽어 처리하고, 출력은 모아서 한 번에 내보내.</p><div class="code-card"><div class="code-head"><span>better · O(N)</span><span>python</span></div><div class="hl"><pre><span></span><code><span class="linenos"> 1</span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>

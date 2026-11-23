@@ -23,6 +23,7 @@
   <h1>소가 길을 건너간 이유 1</h1>
   <p class="summary">소 10마리의 위치 관찰 기록 N개(N ≤ 100)를 보고, 같은 소가 위치를 바꾼 최소 횟수를 구해.</p>
   <a class="ext" href="https://acmicpc.net/problem/14467" target="_blank" rel="noopener">문제 보러 가기 ↗</a>
+  <div class="approach"><span class="label">푸는 방법</span><p>이 문제는 소마다 마지막 위치를 기억해 두고, 위치가 바뀔 때만 세는 구현 문제야. 소 번호를 키로 하는 딕셔너리나 배열 하나면 돼.</p></div>
   <section><h2>내 풀이</h2><div class="code-card"><div class="code-head"><span>my solution</span><span>python</span></div><div class="hl"><pre><span></span><code><span class="linenos"> 1</span><span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">())</span>
 <span class="linenos"> 2</span><span class="n">tree</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="linenos"> 3</span><span class="n">nums</span> <span class="o">=</span> <span class="p">[]</span>
@@ -40,6 +41,7 @@
 <span class="linenos">15</span><span class="nb">print</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
 </code></pre></div>
 </div></section>
+  <section class="judge ok"><div class="judge-head"><h2>내 풀이는?</h2><span class="judge-mark ok">✓ 방향 맞음</span></div><p>맞아, 딕셔너리에 소별 마지막 위치를 저장하고 바뀔 때 센 방식이 정석이야. 다만 입력을 먼저 전부 리스트에 모은 건 필요 없었어.</p></section>
   <section class="card cx-card">
     <div class="cx-head"><span class="label">시간 복잡도</span>
       <span class="badge warn">개선 가능</span></div>
@@ -47,7 +49,6 @@
     <div class="space"><div><span class="label">내 공간</span><code>O(N)</code></div><div><span class="label">최선 공간</span><code>O(1)</code></div></div>
     <p>관찰 기록을 한 번씩 보면서 처리하니까 O(N)이야. 다만 입력을 전부 리스트에 저장해서 공간이 O(N)인데, 소는 10마리뿐이라 바로 처리하면 O(1)로 충분해.</p>
   </section>
-  <section><h2>내 풀이 요약</h2><p>관찰 기록을 모두 리스트에 저장한 뒤, 소마다 마지막 위치를 딕셔너리에 두고 바뀔 때마다 count를 늘렸어.</p></section>
   <div class="two-col"><section><h2>잘한 점</h2><ul class="plus"><li>소 번호를 키로 마지막 위치를 저장한 자료구조 선택이 좋아</li><li>처음 본 소는 이동으로 세지 않는 경계를 맞게 처리했어</li></ul></section><section><h2>코멘트</h2><div class="comment"><strong>입력을 모아둘 필요 없어</strong><p>기록을 읽자마자 바로 비교하면 nums 리스트가 필요 없어.</p></div><div class="comment"><strong>== None 대신 in</strong><p>키가 있는지는 k in tree로 확인하는 게 파이썬다운 방식이야. None과 비교할 땐 is None을 써.</p></div><div class="comment"><strong>split(&quot; &quot;) 대신 split()</strong><p>공백이 두 칸이거나 줄 끝에 공백이 있으면 split(&quot; &quot;)은 빈 문자열이 생겨서 에러가 나.</p></div></section></div>
   
   <section><h2>더 나은 풀이</h2><p>기록을 읽는 즉시 처리하고, 이미 본 소의 위치가 바뀌었을 때만 센 다음 위치를 갱신해.</p><div class="code-card"><div class="code-head"><span>better · O(N)</span><span>python</span></div><div class="hl"><pre><span></span><code><span class="linenos">1</span><span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">())</span>

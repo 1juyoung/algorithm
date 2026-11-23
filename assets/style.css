@@ -73,6 +73,17 @@ border-bottom:1px solid var(--border);transition:background .15s}
 font:12px var(--mono);color:var(--muted-fg)}
 .hl pre{margin:0;padding:16px;overflow-x:auto;font:13.5px/1.75 var(--mono);background:var(--card)}
 .hl .linenos{display:inline-block;width:2.2em;margin-right:12px;color:#9aa1ad;text-align:right;user-select:none}
+.approach{margin-top:22px;padding:16px 18px;border-left:3px solid var(--primary);background:var(--card);
+border-radius:0 var(--r) var(--r) 0}
+.approach p{margin-top:4px;line-height:1.7;font-weight:500}
+.post section.judge{padding:18px 20px;border:1px solid var(--border);border-radius:var(--r);background:var(--card);
+margin-top:20px}
+.judge-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.judge-head h2{margin:0!important}
+.judge p{line-height:1.75}
+.judge-mark{font:500 12px var(--mono);padding:2px 8px;border-radius:3px}
+.judge-mark.ok{color:var(--primary);border:1px solid var(--primary)}
+.judge-mark.no{color:var(--fg);background:var(--hl)}
 .cx-card{padding:24px 26px}
 .cx-head{display:flex;justify-content:space-between;align-items:center}
 .label{font:12px var(--mono);color:var(--muted-fg);letter-spacing:.08em}
