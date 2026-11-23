@@ -42,7 +42,6 @@ jobs:
             git worktree add -B gh-pages site origin/gh-pages
           else
             git worktree add --orphan -b gh-pages site
-            cp -r .github/blog-template/. site/
           fi
 
       - name: Analyze solutions
@@ -57,8 +56,14 @@ jobs:
             --base-url "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}" \
             ${{ github.event_name == 'schedule' && '--skip-if-exists' || '' }}
 
+      - name: Build site
+        if: steps.review.outputs.data_path != ''
+        run: |
+          pip install --quiet pygments
+          python .github/scripts/build_site.py --site-dir site
+
       - name: Publish to gh-pages
-        if: steps.review.outputs.post_path != ''
+        if: steps.review.outputs.data_path != ''
         run: |
           cd site
           git add -A
