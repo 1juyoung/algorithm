@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f3f4ef">
+<title>백준 9046 복호화 · 1juyoung의 알고리즘 노트</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="logo" href="../../"><span class="prompt">&gt;</span> 1juyoung/algo-notes</a>
+    <a class="header-link" href="https://github.com/1juyoung/algorithm" target="_blank" rel="noopener">GitHub ↗</a>
+  </div>
+</header>
+<main class="container post">
+  <a class="back" href="../../">← 목록으로</a>
+  <p class="post-meta">2026-11-22 · 백준 9046 · Bronze II</p>
+  <h1>복호화</h1>
+  <p class="summary">암호문(T ≤ 20개)마다 공백을 뺀 알파벳 중 가장 많이 나온 문자를 출력하고, 최다 문자가 여러 개면 ?를 출력해.</p>
+  <a class="ext" href="https://acmicpc.net/problem/9046" target="_blank" rel="noopener">문제 보러 가기 ↗</a>
+  <section><h2>내 풀이</h2><div class="code-card"><div class="code-head"><span>my solution</span><span>python</span></div><div class="hl"><pre><span></span><code><span class="linenos"> 1</span><span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">())</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+<span class="linenos"> 4</span>    <span class="n">tree</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="linenos"> 5</span>    
+<span class="linenos"> 6</span>    <span class="n">word</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">input</span><span class="p">())</span>
+<span class="linenos"> 7</span>    
+<span class="linenos"> 8</span>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">word</span><span class="p">:</span>
+<span class="linenos"> 9</span>        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="s1">' '</span><span class="p">:</span>
+<span class="linenos">10</span>            <span class="k">continue</span>
+<span class="linenos">11</span>        <span class="n">tree</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="linenos">12</span>
+<span class="linenos">13</span>    <span class="n">nums</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+<span class="linenos">14</span>    <span class="n">maxN</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+<span class="linenos">15</span>    
+<span class="linenos">16</span>    <span class="k">if</span> <span class="n">nums</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">maxN</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+<span class="linenos">17</span>        <span class="nb">print</span><span class="p">(</span><span class="s1">'?'</span><span class="p">)</span>
+<span class="linenos">18</span>        
+<span class="linenos">19</span>    <span class="k">else</span><span class="p">:</span>
+<span class="linenos">20</span>        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<span class="linenos">21</span>            <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="n">maxN</span><span class="p">:</span>
+<span class="linenos">22</span>                  <span class="nb">print</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+</code></pre></div>
+</div></section>
+  <section class="card cx-card">
+    <div class="cx-head"><span class="label">시간 복잡도</span>
+      <span class="badge warn">개선 가능</span></div>
+    <div class="cx-big"><mark>O(T·L)</mark></div>
+    <div class="space"><div><span class="label">내 공간</span><code>O(1)</code></div><div><span class="label">최선 공간</span><code>O(1)</code></div></div>
+    <p>테스트마다 문자열 길이 L만큼 한 번 세고, 알파벳 종류는 최대 26개라 나머지 작업은 상수야. 전체 O(T·L)로 충분히 빨라.</p>
+  </section>
+  <section><h2>내 풀이 요약</h2><p>딕셔너리로 알파벳 개수를 세고, 최댓값이 두 번 이상 나오면 ?, 아니면 그 키를 출력했어.</p></section>
+  <div class="two-col"><section><h2>잘한 점</h2><ul class="plus"><li>공백을 continue로 건너뛰어서 세는 대상을 정확히 맞췄어</li><li>get(i, 0) + 1로 개수 세기를 깔끔하게 했어</li><li>count(maxN)으로 동점 여부를 판단한 아이디어가 좋아</li></ul></section><section><h2>코멘트</h2><div class="comment"><strong>max를 두 번 계산할 필요 없어</strong><p>nums에 이미 값 목록이 있으니 max(nums)로 쓰면 돼.</p></div><div class="comment"><strong>출력 줄 들여쓰기</strong><p>print(j)만 6칸 들여쓰기가 섞여 있어. 동작은 하지만 4칸으로 맞추는 게 좋아.</p></div><div class="comment"><strong>Counter를 쓰면 더 짧아</strong><p>collections.Counter와 most_common(2)를 쓰면 세기와 동점 판단을 바로 할 수 있어.</p></div></section></div>
+  <section><h2>이 문제에서 드러난 약점</h2><div class="card weak-table"><div class="weak-row"><span class="weak-tag">문법 · 내장 함수</span><span>개수 세기에 바로 쓰는 Counter를 몰라서 직접 구현했어.</span></div></div></section>
+  <section><h2>더 나은 풀이</h2><p>Counter로 개수를 세고, 가장 많은 두 개의 개수가 같으면 ?를 출력해.</p><div class="code-card"><div class="code-head"><span>better · O(T·L)</span><span>python</span></div><div class="hl"><pre><span></span><code><span class="linenos"> 1</span><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="n">t</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">())</span>
+<span class="linenos"> 4</span><span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+<span class="linenos"> 5</span>    <span class="n">cnt</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="nb">input</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">' '</span><span class="p">,</span> <span class="s1">''</span><span class="p">))</span>
+<span class="linenos"> 6</span>    <span class="n">top</span> <span class="o">=</span> <span class="n">cnt</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="linenos"> 7</span>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">top</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">top</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">top</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
+<span class="linenos"> 8</span>        <span class="nb">print</span><span class="p">(</span><span class="s1">'?'</span><span class="p">)</span>
+<span class="linenos"> 9</span>    <span class="k">else</span><span class="p">:</span>
+<span class="linenos">10</span>        <span class="nb">print</span><span class="p">(</span><span class="n">top</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+</code></pre></div>
+</div></section>
+</main>
+<footer class="site-footer"><div class="container">매일 자정, 그날 푼 풀이를 자동으로 분석해서 올려요.</div></footer>
+</body>
+</html>

@@ -1,0 +1,210 @@
+{
+  "date": "2026-11-22",
+  "problems": [
+    {
+      "slug": "2026-11-22-boj-11720",
+      "date": "2026-11-22",
+      "title": "숫자의 합",
+      "tier": "Bronze IV",
+      "number": "11720",
+      "link": "https://acmicpc.net/problem/11720",
+      "site": "백준",
+      "language": "Python",
+      "categories": "구현, 수학, 문자열",
+      "performance": "메모리: 13728 KB, 시간: 31 ms",
+      "code": "n = int(input())\nnums = str(input())\nanswer = 0\nfor i in nums:\n    answer += int(i)\nprint(answer)",
+      "code_ext": ".py",
+      "folder": "Python/백준/Bronze/11720. 숫자의 합",
+      "analysis": {
+        "problem_summary": "공백 없이 붙어 있는 숫자 N개(1 ≤ N ≤ 100)를 한 글자씩 더한 합을 구해.",
+        "verdict": "개선 가능",
+        "my_time": "O(N)",
+        "best_time": "O(N)",
+        "my_space": "O(N)",
+        "best_space": "O(N)",
+        "complexity_note": "숫자 문자열을 한 번 훑으면서 더하니까 O(N)이야. N이 최대 100이라 연산은 100번 정도라 아주 여유로워.",
+        "summary": "숫자 문자열을 한 글자씩 돌면서 int로 바꿔 answer에 더했어.",
+        "good_points": [
+          "문자열을 한 글자씩 돌며 숫자로 바꾸는 흐름이 정확해",
+          "입력 크기에 맞는 O(N) 풀이야"
+        ],
+        "comments": [
+          {
+            "title": "str(input())은 필요 없어",
+            "body": "input()은 이미 문자열을 돌려줘서 str()로 한 번 더 감쌀 필요가 없어."
+          },
+          {
+            "title": "쓰지 않는 변수 n",
+            "body": "개수 N은 문자열 길이로 알 수 있어서 따로 저장하지 않아도 돼. 첫 줄은 input()으로 읽고 버려도 충분해."
+          }
+        ],
+        "weaknesses": [
+          {
+            "tag": "문법 · 내장 함수",
+            "reason": "sum과 map으로 한 줄에 끝나는 계산을 반복문으로 직접 했어."
+          }
+        ],
+        "better_summary": "숫자 문자열의 각 글자를 map(int, ...)으로 바꾸고 sum으로 바로 더해.",
+        "better_code": "input()\nprint(sum(map(int, input())))\n"
+      }
+    },
+    {
+      "slug": "2026-11-22-boj-9046",
+      "date": "2026-11-22",
+      "title": "복호화",
+      "tier": "Bronze II",
+      "number": "9046",
+      "link": "https://acmicpc.net/problem/9046",
+      "site": "백준",
+      "language": "Python",
+      "categories": "구현, 문자열",
+      "performance": "메모리: 13728 KB, 시간: 39 ms",
+      "code": "n = int(input())\n\nfor o in range(n):\n    tree = {}\n    \n    word = str(input())\n    \n    for i in word:\n        if i == ' ':\n            continue\n        tree[i] = tree.get(i, 0) + 1\n\n    nums = list(tree.values())\n    maxN = max(tree.values())\n    \n    if nums.count(maxN) > 1:\n        print('?')\n        \n    else:\n        for j, k in tree.items():\n            if k == maxN:\n                  print(j)",
+      "code_ext": ".py",
+      "folder": "Python/백준/Bronze/9046. 복호화",
+      "analysis": {
+        "problem_summary": "암호문(T ≤ 20개)마다 공백을 뺀 알파벳 중 가장 많이 나온 문자를 출력하고, 최다 문자가 여러 개면 ?를 출력해.",
+        "verdict": "개선 가능",
+        "my_time": "O(T·L)",
+        "best_time": "O(T·L)",
+        "my_space": "O(1)",
+        "best_space": "O(1)",
+        "complexity_note": "테스트마다 문자열 길이 L만큼 한 번 세고, 알파벳 종류는 최대 26개라 나머지 작업은 상수야. 전체 O(T·L)로 충분히 빨라.",
+        "summary": "딕셔너리로 알파벳 개수를 세고, 최댓값이 두 번 이상 나오면 ?, 아니면 그 키를 출력했어.",
+        "good_points": [
+          "공백을 continue로 건너뛰어서 세는 대상을 정확히 맞췄어",
+          "get(i, 0) + 1로 개수 세기를 깔끔하게 했어",
+          "count(maxN)으로 동점 여부를 판단한 아이디어가 좋아"
+        ],
+        "comments": [
+          {
+            "title": "max를 두 번 계산할 필요 없어",
+            "body": "nums에 이미 값 목록이 있으니 max(nums)로 쓰면 돼."
+          },
+          {
+            "title": "출력 줄 들여쓰기",
+            "body": "print(j)만 6칸 들여쓰기가 섞여 있어. 동작은 하지만 4칸으로 맞추는 게 좋아."
+          },
+          {
+            "title": "Counter를 쓰면 더 짧아",
+            "body": "collections.Counter와 most_common(2)를 쓰면 세기와 동점 판단을 바로 할 수 있어."
+          }
+        ],
+        "weaknesses": [
+          {
+            "tag": "문법 · 내장 함수",
+            "reason": "개수 세기에 바로 쓰는 Counter를 몰라서 직접 구현했어."
+          }
+        ],
+        "better_summary": "Counter로 개수를 세고, 가장 많은 두 개의 개수가 같으면 ?를 출력해.",
+        "better_code": "from collections import Counter\n\nt = int(input())\nfor _ in range(t):\n    cnt = Counter(input().replace(' ', ''))\n    top = cnt.most_common(2)\n    if len(top) > 1 and top[0][1] == top[1][1]:\n        print('?')\n    else:\n        print(top[0][0])\n"
+      }
+    },
+    {
+      "slug": "2026-11-22-boj-14467",
+      "date": "2026-11-22",
+      "title": "소가 길을 건너간 이유 1",
+      "tier": "Bronze I",
+      "number": "14467",
+      "link": "https://acmicpc.net/problem/14467",
+      "site": "백준",
+      "language": "Python",
+      "categories": "구현",
+      "performance": "메모리: 13728 KB, 시간: 28 ms",
+      "code": "n = int(input())\ntree = {}\nnums = []\ncount = 0\nfor o in range(n):\n    nums.append(list(map(int, input().split(\" \"))))\nfor k, y in nums:\n    if tree.get(k) == None:\n        tree[k] = y\n        \n    if tree.get(k) != y:\n        count += 1\n        tree[k] = y\n\nprint(count)",
+      "code_ext": ".py",
+      "folder": "Python/백준/Bronze/14467. 소가 길을 건너간 이유 1",
+      "analysis": {
+        "problem_summary": "소 10마리의 위치 관찰 기록 N개(N ≤ 100)를 보고, 같은 소가 위치를 바꾼 최소 횟수를 구해.",
+        "verdict": "개선 가능",
+        "my_time": "O(N)",
+        "best_time": "O(N)",
+        "my_space": "O(N)",
+        "best_space": "O(1)",
+        "complexity_note": "관찰 기록을 한 번씩 보면서 처리하니까 O(N)이야. 다만 입력을 전부 리스트에 저장해서 공간이 O(N)인데, 소는 10마리뿐이라 바로 처리하면 O(1)로 충분해.",
+        "summary": "관찰 기록을 모두 리스트에 저장한 뒤, 소마다 마지막 위치를 딕셔너리에 두고 바뀔 때마다 count를 늘렸어.",
+        "good_points": [
+          "소 번호를 키로 마지막 위치를 저장한 자료구조 선택이 좋아",
+          "처음 본 소는 이동으로 세지 않는 경계를 맞게 처리했어"
+        ],
+        "comments": [
+          {
+            "title": "입력을 모아둘 필요 없어",
+            "body": "기록을 읽자마자 바로 비교하면 nums 리스트가 필요 없어."
+          },
+          {
+            "title": "== None 대신 in",
+            "body": "키가 있는지는 k in tree로 확인하는 게 파이썬다운 방식이야. None과 비교할 땐 is None을 써."
+          },
+          {
+            "title": "split(\" \") 대신 split()",
+            "body": "공백이 두 칸이거나 줄 끝에 공백이 있으면 split(\" \")은 빈 문자열이 생겨서 에러가 나."
+          }
+        ],
+        "weaknesses": [
+          {
+            "tag": "입력 처리",
+            "reason": "split(\" \")은 입력 공백에 따라 깨질 수 있어."
+          }
+        ],
+        "better_summary": "기록을 읽는 즉시 처리하고, 이미 본 소의 위치가 바뀌었을 때만 센 다음 위치를 갱신해.",
+        "better_code": "n = int(input())\npos = {}\ncount = 0\nfor _ in range(n):\n    cow, side = map(int, input().split())\n    if cow in pos and pos[cow] != side:\n        count += 1\n    pos[cow] = side\nprint(count)\n"
+      }
+    },
+    {
+      "slug": "2026-11-22-boj-10828",
+      "date": "2026-11-22",
+      "title": "스택",
+      "tier": "Silver IV",
+      "number": "10828",
+      "link": "https://acmicpc.net/problem/10828",
+      "site": "백준",
+      "language": "Python",
+      "categories": "자료 구조, 구현, 스택",
+      "performance": "메모리: 15676 KB, 시간: 220 ms",
+      "code": "n = int(input())\nl = []\nfor i in range(n):\n    l.append(list(map(str, input().split(\" \"))))\n\ns = []\n\nfor i in range(len(l)):\n    if l[i][0] == 'push':\n        s.append(l[i][1])\n    elif l[i][0] == 'pop':\n        if len(s) == 0:\n            print(-1)\n        else:\n            print(s.pop())\n    elif l[i][0] == 'size':\n        print(len(s))\n    elif l[i][0] == 'empty':\n        if len(s) == 0:\n            print(1)\n        else:\n            print(0)\n    else:\n        if len(s) == 0:\n            print(-1)\n        else:\n            print(s[-1])",
+      "code_ext": ".py",
+      "folder": "Python/백준/Silver/10828. 스택",
+      "analysis": {
+        "problem_summary": "push, pop, size, empty, top 명령 N개(N ≤ 10,000)를 처리하는 스택을 구현해.",
+        "verdict": "개선 가능",
+        "my_time": "O(N)",
+        "best_time": "O(N)",
+        "my_space": "O(N)",
+        "best_space": "O(N)",
+        "complexity_note": "명령마다 append, pop, len이 모두 O(1)이라 전체 O(N)이야. 다만 input()과 print를 1만 번씩 부르면 파이썬에서는 느려질 수 있어. 실제 실행 시간도 220ms가 나왔어.",
+        "summary": "명령을 모두 리스트에 저장한 뒤, 리스트 s를 스택으로 써서 명령마다 바로 출력했어.",
+        "good_points": [
+          "파이썬 리스트의 append와 pop을 스택으로 정확히 썼어",
+          "빈 스택일 때 -1, 0, 1 처리를 빠짐없이 했어"
+        ],
+        "comments": [
+          {
+            "title": "대량 입력은 sys.stdin.readline",
+            "body": "명령이 1만 개라 input() 대신 sys.stdin.readline을 쓰면 훨씬 빨라."
+          },
+          {
+            "title": "출력은 모아서 한 번에",
+            "body": "결과를 리스트에 모았다가 '\\n'.join으로 한 번에 출력하면 print 호출이 줄어."
+          },
+          {
+            "title": "map(str, ...)은 필요 없어",
+            "body": "split()의 결과는 이미 문자열이라 str로 바꿀 필요가 없어."
+          },
+          {
+            "title": "range(len(l)) 대신 직접 순회",
+            "body": "for cmd in l처럼 바로 돌면 l[i][0]처럼 인덱스를 반복해서 쓰지 않아도 돼."
+          }
+        ],
+        "weaknesses": [
+          {
+            "tag": "입력 처리",
+            "reason": "명령이 많은 문제에서 빠른 입출력을 쓰지 않았어."
+          }
+        ],
+        "better_summary": "sys.stdin.readline으로 명령을 바로 읽어 처리하고, 출력은 모아서 한 번에 내보내.",
+        "better_code": "import sys\ninput = sys.stdin.readline\n\nn = int(input())\nstack = []\nout = []\nfor _ in range(n):\n    cmd = input().split()\n    if cmd[0] == 'push':\n        stack.append(cmd[1])\n    elif cmd[0] == 'pop':\n        out.append(stack.pop() if stack else '-1')\n    elif cmd[0] == 'size':\n        out.append(str(len(stack)))\n    elif cmd[0] == 'empty':\n        out.append('0' if stack else '1')\n    else:  # top\n        out.append(stack[-1] if stack else '-1')\nprint('\\n'.join(out))\n"
+      }
+    }
+  ]
+}

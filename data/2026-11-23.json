@@ -1,0 +1,61 @@
+{
+  "date": "2026-11-23",
+  "problems": [
+    {
+      "slug": "2026-11-23-boj-20546",
+      "date": "2026-11-23",
+      "title": "🐜 기적의 매매법 🐜",
+      "tier": "Silver V",
+      "number": "20546",
+      "link": "https://acmicpc.net/problem/20546",
+      "site": "백준",
+      "language": "Python",
+      "categories": "구현, 시뮬레이션",
+      "performance": "메모리: 13728 KB, 시간: 30 ms",
+      "code": "n = int(input())\nnums = list(map(int, input().split()))\n\nanswer = [0, 0]\n\nanStr = ''\n# 연속 3번 하락 또는 상승인지 카운트할 애\ncount = {-1: 0, 1: 0}\n\n# 여기서 키 0의 값은 현금을 말함\n# 다른 숫자는 매입한 값과 매수의 양\njh = {0: n}\nsm = {0: n}\n\nfor idx, i in enumerate(nums):\n\n    if idx != 0:\n        if nums[idx - 1] < i:\n            count[1] += 1\n            count[-1] = 0\n        elif nums[idx - 1] > i:\n            count[-1] += 1\n            count[1] = 0\n        else:\n            count[-1] = 0\n            count[1] = 0\n\n    if i <= n:\n        while jh[0] >= i:\n            jh[0] = jh[0] - i\n            jh[i] = jh.get(i, 0) + 1\n\n    if count[-1] >= 3:\n        if i <= sm[0]:\n            while sm[0] >= i:\n                sm[0] = sm[0] - i\n                sm[i] = sm.get(i, 0) + 1\n\n    if count[1] >= 3:\n        for j in sm.keys():\n            if j == 0:\n                continue\n            sm[0] = sm[0] + (i * sm[j])\n            sm[j] = 0\n\nfor a, k in sm.items():\n    if a != 0:\n        answer[0] += k * nums[-1]\n\nfor l, q in jh.items():\n    if l != 0:\n        answer[1] += q * nums[-1]\n# sm\nanswer[0] = answer[0] + sm[0]\n\n# jh\nanswer[1] = answer[1] + jh[0]\n\nif answer[0] > answer[1]:\n    anStr = \"TIMING\"\nelif answer[0] < answer[1]:\n    anStr = \"BNP\"\nelse:\n    anStr = \"SAMESAME\"\n\nprint(anStr)\n",
+      "code_ext": ".py",
+      "folder": "Python/백준/Silver/20546. 🐜 기적의 매매법 🐜",
+      "analysis": {
+        "problem_summary": "현금과 14일간 주가가 주어질 때, 매일 최대한 사는 준현과 3일 연속 하락에 사고 3일 연속 상승에 파는 성민 중 마지막 날 자산이 큰 사람을 구해.",
+        "verdict": "개선 가능",
+        "my_time": "O(D·C)",
+        "best_time": "O(D)",
+        "my_space": "O(D)",
+        "best_space": "O(D)",
+        "complexity_note": "주식을 while로 한 주씩 사서 하루에 최대 현금 C번(C ≤ 1000) 반복해. D가 14일이라 최대 1만 4천 번 정도라 통과는 하지만, // 와 %를 쓰면 하루 한 번 계산으로 끝나.",
+        "summary": "상승·하락 연속 횟수를 먼저 세고, 준현은 매일, 성민은 3일 이상 연속 하락일 때 한 주씩 사고 3일 이상 연속 상승이면 전부 팔았어.",
+        "good_points": [
+          "오늘의 상승·하락을 먼저 세고 판단하는 순서가 정확해",
+          "방향이 바뀌면 반대 횟수를 0으로 되돌려서 연속을 제대로 판정했어",
+          ">= 3으로 4일째 연속에도 다시 사게 처리했어"
+        ],
+        "comments": [
+          {
+            "title": "한 주씩 사는 반복문",
+            "body": "살 수 있는 주식 수는 현금 // 가격, 남는 돈은 현금 % 가격으로 한 번에 구할 수 있어."
+          },
+          {
+            "title": "산 가격별로 저장할 필요 없어",
+            "body": "필요한 건 현금과 보유 주식 수뿐이라 딕셔너리 대신 변수 두 개면 충분해."
+          },
+          {
+            "title": "겹치는 조건",
+            "body": "if i <= n, if i <= sm[0]은 바로 아래 while 조건과 겹쳐서 지워도 돼."
+          }
+        ],
+        "weaknesses": [
+          {
+            "tag": "자료구조 선택",
+            "reason": "주식 수만 있으면 되는데 산 가격별 딕셔너리를 써서 코드가 복잡해졌어."
+          },
+          {
+            "tag": "구현 · 시뮬레이션",
+            "reason": "처음에 연속 판정과 판단 순서를 놓쳐서 여러 번 고쳤어."
+          }
+        ],
+        "better_summary": "현금과 주식 수 두 변수로 관리하고, 매수는 // 와 %로 한 번에 계산해.",
+        "better_code": "cash = int(input())\nprices = list(map(int, input().split()))\n\njh_cash, jh_stock = cash, 0\nsm_cash, sm_stock = cash, 0\nup = down = 0\n\nfor i, price in enumerate(prices):\n    if i > 0:\n        if price > prices[i - 1]:\n            up, down = up + 1, 0\n        elif price < prices[i - 1]:\n            up, down = 0, down + 1\n        else:\n            up = down = 0\n\n    jh_stock += jh_cash // price  # 준현: 살 수 있으면 매일 최대한\n    jh_cash %= price\n\n    if down >= 3:  # 성민: 3일 이상 연속 하락이면 전량 매수\n        sm_stock += sm_cash // price\n        sm_cash %= price\n    elif up >= 3:  # 3일 이상 연속 상승이면 전량 매도\n        sm_cash += sm_stock * price\n        sm_stock = 0\n\nlast = prices[-1]\njh = jh_cash + jh_stock * last\nsm = sm_cash + sm_stock * last\nprint(\"BNP\" if jh > sm else \"TIMING\" if sm > jh else \"SAMESAME\")\n"
+      }
+    }
+  ]
+}

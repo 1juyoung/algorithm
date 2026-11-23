@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f3f4ef">
+<title>백준 20546 🐜 기적의 매매법 🐜 · 1juyoung의 알고리즘 노트</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="logo" href="../../"><span class="prompt">&gt;</span> 1juyoung/algo-notes</a>
+    <a class="header-link" href="https://github.com/1juyoung/algorithm" target="_blank" rel="noopener">GitHub ↗</a>
+  </div>
+</header>
+<main class="container post">
+  <a class="back" href="../../">← 목록으로</a>
+  <p class="post-meta">2026-11-23 · 백준 20546 · Silver V</p>
+  <h1>🐜 기적의 매매법 🐜</h1>
+  <p class="summary">현금과 14일간 주가가 주어질 때, 매일 최대한 사는 준현과 3일 연속 하락에 사고 3일 연속 상승에 파는 성민 중 마지막 날 자산이 큰 사람을 구해.</p>
+  <a class="ext" href="https://acmicpc.net/problem/20546" target="_blank" rel="noopener">문제 보러 가기 ↗</a>
+  <section><h2>내 풀이</h2><div class="code-card"><div class="code-head"><span>my solution</span><span>python</span></div><div class="hl"><pre><span></span><code><span class="linenos"> 1</span><span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">())</span>
+<span class="linenos"> 2</span><span class="n">nums</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">input</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()))</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="n">answer</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="linenos"> 5</span>
+<span class="linenos"> 6</span><span class="n">anStr</span> <span class="o">=</span> <span class="s1">''</span>
+<span class="linenos"> 7</span><span class="c1"># 연속 3번 하락 또는 상승인지 카운트할 애</span>
+<span class="linenos"> 8</span><span class="n">count</span> <span class="o">=</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span><span class="c1"># 여기서 키 0의 값은 현금을 말함</span>
+<span class="linenos">11</span><span class="c1"># 다른 숫자는 매입한 값과 매수의 양</span>
+<span class="linenos">12</span><span class="n">jh</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="n">n</span><span class="p">}</span>
+<span class="linenos">13</span><span class="n">sm</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="n">n</span><span class="p">}</span>
+<span class="linenos">14</span>
+<span class="linenos">15</span><span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nums</span><span class="p">):</span>
+<span class="linenos">16</span>
+<span class="linenos">17</span>    <span class="k">if</span> <span class="n">idx</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+<span class="linenos">18</span>        <span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">idx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">i</span><span class="p">:</span>
+<span class="linenos">19</span>            <span class="n">count</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="linenos">20</span>            <span class="n">count</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="linenos">21</span>        <span class="k">elif</span> <span class="n">nums</span><span class="p">[</span><span class="n">idx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">i</span><span class="p">:</span>
+<span class="linenos">22</span>            <span class="n">count</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="linenos">23</span>            <span class="n">count</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="linenos">24</span>        <span class="k">else</span><span class="p">:</span>
+<span class="linenos">25</span>            <span class="n">count</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="linenos">26</span>            <span class="n">count</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="linenos">27</span>
+<span class="linenos">28</span>    <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">:</span>
+<span class="linenos">29</span>        <span class="k">while</span> <span class="n">jh</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">i</span><span class="p">:</span>
+<span class="linenos">30</span>            <span class="n">jh</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">jh</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">i</span>
+<span class="linenos">31</span>            <span class="n">jh</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">jh</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="linenos">32</span>
+<span class="linenos">33</span>    <span class="k">if</span> <span class="n">count</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+<span class="linenos">34</span>        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">sm</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+<span class="linenos">35</span>            <span class="k">while</span> <span class="n">sm</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">i</span><span class="p">:</span>
+<span class="linenos">36</span>                <span class="n">sm</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">sm</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">i</span>
+<span class="linenos">37</span>                <span class="n">sm</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="linenos">38</span>
+<span class="linenos">39</span>    <span class="k">if</span> <span class="n">count</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+<span class="linenos">40</span>        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">sm</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+<span class="linenos">41</span>            <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+<span class="linenos">42</span>                <span class="k">continue</span>
+<span class="linenos">43</span>            <span class="n">sm</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">sm</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="n">sm</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+<span class="linenos">44</span>            <span class="n">sm</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="linenos">45</span>
+<span class="linenos">46</span><span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">sm</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<span class="linenos">47</span>    <span class="k">if</span> <span class="n">a</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+<span class="linenos">48</span>        <span class="n">answer</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="n">k</span> <span class="o">*</span> <span class="n">nums</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="linenos">49</span>
+<span class="linenos">50</span><span class="k">for</span> <span class="n">l</span><span class="p">,</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">jh</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<span class="linenos">51</span>    <span class="k">if</span> <span class="n">l</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+<span class="linenos">52</span>        <span class="n">answer</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">q</span> <span class="o">*</span> <span class="n">nums</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="linenos">53</span><span class="c1"># sm</span>
+<span class="linenos">54</span><span class="n">answer</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">answer</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">sm</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="linenos">55</span>
+<span class="linenos">56</span><span class="c1"># jh</span>
+<span class="linenos">57</span><span class="n">answer</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">answer</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">jh</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="linenos">58</span>
+<span class="linenos">59</span><span class="k">if</span> <span class="n">answer</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">answer</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+<span class="linenos">60</span>    <span class="n">anStr</span> <span class="o">=</span> <span class="s2">"TIMING"</span>
+<span class="linenos">61</span><span class="k">elif</span> <span class="n">answer</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">answer</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+<span class="linenos">62</span>    <span class="n">anStr</span> <span class="o">=</span> <span class="s2">"BNP"</span>
+<span class="linenos">63</span><span class="k">else</span><span class="p">:</span>
+<span class="linenos">64</span>    <span class="n">anStr</span> <span class="o">=</span> <span class="s2">"SAMESAME"</span>
+<span class="linenos">65</span>
+<span class="linenos">66</span><span class="nb">print</span><span class="p">(</span><span class="n">anStr</span><span class="p">)</span>
+</code></pre></div>
+</div></section>
+  <section class="card cx-card">
+    <div class="cx-head"><span class="label">시간 복잡도</span>
+      <span class="badge warn">개선 가능</span></div>
+    <div class="cx-big"><s>O(D·C)</s><span class="arrow">⟶</span><mark>O(D)</mark></div>
+    <div class="space"><div><span class="label">내 공간</span><code>O(D)</code></div><div><span class="label">최선 공간</span><code>O(D)</code></div></div>
+    <p>주식을 while로 한 주씩 사서 하루에 최대 현금 C번(C ≤ 1000) 반복해. D가 14일이라 최대 1만 4천 번 정도라 통과는 하지만, // 와 %를 쓰면 하루 한 번 계산으로 끝나.</p>
+  </section>
+  <section><h2>내 풀이 요약</h2><p>상승·하락 연속 횟수를 먼저 세고, 준현은 매일, 성민은 3일 이상 연속 하락일 때 한 주씩 사고 3일 이상 연속 상승이면 전부 팔았어.</p></section>
+  <div class="two-col"><section><h2>잘한 점</h2><ul class="plus"><li>오늘의 상승·하락을 먼저 세고 판단하는 순서가 정확해</li><li>방향이 바뀌면 반대 횟수를 0으로 되돌려서 연속을 제대로 판정했어</li><li>&gt;= 3으로 4일째 연속에도 다시 사게 처리했어</li></ul></section><section><h2>코멘트</h2><div class="comment"><strong>한 주씩 사는 반복문</strong><p>살 수 있는 주식 수는 현금 // 가격, 남는 돈은 현금 % 가격으로 한 번에 구할 수 있어.</p></div><div class="comment"><strong>산 가격별로 저장할 필요 없어</strong><p>필요한 건 현금과 보유 주식 수뿐이라 딕셔너리 대신 변수 두 개면 충분해.</p></div><div class="comment"><strong>겹치는 조건</strong><p>if i &lt;= n, if i &lt;= sm[0]은 바로 아래 while 조건과 겹쳐서 지워도 돼.</p></div></section></div>
+  <section><h2>이 문제에서 드러난 약점</h2><div class="card weak-table"><div class="weak-row"><span class="weak-tag">자료구조 선택</span><span>주식 수만 있으면 되는데 산 가격별 딕셔너리를 써서 코드가 복잡해졌어.</span></div><div class="weak-row"><span class="weak-tag">구현 · 시뮬레이션</span><span>처음에 연속 판정과 판단 순서를 놓쳐서 여러 번 고쳤어.</span></div></div></section>
+  <section><h2>더 나은 풀이</h2><p>현금과 주식 수 두 변수로 관리하고, 매수는 // 와 %로 한 번에 계산해.</p><div class="code-card"><div class="code-head"><span>better · O(D)</span><span>python</span></div><div class="hl"><pre><span></span><code><span class="linenos"> 1</span><span class="n">cash</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">())</span>
+<span class="linenos"> 2</span><span class="n">prices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">input</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()))</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="n">jh_cash</span><span class="p">,</span> <span class="n">jh_stock</span> <span class="o">=</span> <span class="n">cash</span><span class="p">,</span> <span class="mi">0</span>
+<span class="linenos"> 5</span><span class="n">sm_cash</span><span class="p">,</span> <span class="n">sm_stock</span> <span class="o">=</span> <span class="n">cash</span><span class="p">,</span> <span class="mi">0</span>
+<span class="linenos"> 6</span><span class="n">up</span> <span class="o">=</span> <span class="n">down</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">price</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">prices</span><span class="p">):</span>
+<span class="linenos"> 9</span>    <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+<span class="linenos">10</span>        <span class="k">if</span> <span class="n">price</span> <span class="o">&gt;</span> <span class="n">prices</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]:</span>
+<span class="linenos">11</span>            <span class="n">up</span><span class="p">,</span> <span class="n">down</span> <span class="o">=</span> <span class="n">up</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span>
+<span class="linenos">12</span>        <span class="k">elif</span> <span class="n">price</span> <span class="o">&lt;</span> <span class="n">prices</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]:</span>
+<span class="linenos">13</span>            <span class="n">up</span><span class="p">,</span> <span class="n">down</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">down</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="linenos">14</span>        <span class="k">else</span><span class="p">:</span>
+<span class="linenos">15</span>            <span class="n">up</span> <span class="o">=</span> <span class="n">down</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="linenos">16</span>
+<span class="linenos">17</span>    <span class="n">jh_stock</span> <span class="o">+=</span> <span class="n">jh_cash</span> <span class="o">//</span> <span class="n">price</span>  <span class="c1"># 준현: 살 수 있으면 매일 최대한</span>
+<span class="linenos">18</span>    <span class="n">jh_cash</span> <span class="o">%=</span> <span class="n">price</span>
+<span class="linenos">19</span>
+<span class="linenos">20</span>    <span class="k">if</span> <span class="n">down</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>  <span class="c1"># 성민: 3일 이상 연속 하락이면 전량 매수</span>
+<span class="linenos">21</span>        <span class="n">sm_stock</span> <span class="o">+=</span> <span class="n">sm_cash</span> <span class="o">//</span> <span class="n">price</span>
+<span class="linenos">22</span>        <span class="n">sm_cash</span> <span class="o">%=</span> <span class="n">price</span>
+<span class="linenos">23</span>    <span class="k">elif</span> <span class="n">up</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>  <span class="c1"># 3일 이상 연속 상승이면 전량 매도</span>
+<span class="linenos">24</span>        <span class="n">sm_cash</span> <span class="o">+=</span> <span class="n">sm_stock</span> <span class="o">*</span> <span class="n">price</span>
+<span class="linenos">25</span>        <span class="n">sm_stock</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="linenos">26</span>
+<span class="linenos">27</span><span class="n">last</span> <span class="o">=</span> <span class="n">prices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="linenos">28</span><span class="n">jh</span> <span class="o">=</span> <span class="n">jh_cash</span> <span class="o">+</span> <span class="n">jh_stock</span> <span class="o">*</span> <span class="n">last</span>
+<span class="linenos">29</span><span class="n">sm</span> <span class="o">=</span> <span class="n">sm_cash</span> <span class="o">+</span> <span class="n">sm_stock</span> <span class="o">*</span> <span class="n">last</span>
+<span class="linenos">30</span><span class="nb">print</span><span class="p">(</span><span class="s2">"BNP"</span> <span class="k">if</span> <span class="n">jh</span> <span class="o">&gt;</span> <span class="n">sm</span> <span class="k">else</span> <span class="s2">"TIMING"</span> <span class="k">if</span> <span class="n">sm</span> <span class="o">&gt;</span> <span class="n">jh</span> <span class="k">else</span> <span class="s2">"SAMESAME"</span><span class="p">)</span>
+</code></pre></div>
+</div></section>
+</main>
+<footer class="site-footer"><div class="container">매일 자정, 그날 푼 풀이를 자동으로 분석해서 올려요.</div></footer>
+</body>
+</html>

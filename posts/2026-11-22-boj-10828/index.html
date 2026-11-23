@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f3f4ef">
+<title>백준 10828 스택 · 1juyoung의 알고리즘 노트</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="logo" href="../../"><span class="prompt">&gt;</span> 1juyoung/algo-notes</a>
+    <a class="header-link" href="https://github.com/1juyoung/algorithm" target="_blank" rel="noopener">GitHub ↗</a>
+  </div>
+</header>
+<main class="container post">
+  <a class="back" href="../../">← 목록으로</a>
+  <p class="post-meta">2026-11-22 · 백준 10828 · Silver IV</p>
+  <h1>스택</h1>
+  <p class="summary">push, pop, size, empty, top 명령 N개(N ≤ 10,000)를 처리하는 스택을 구현해.</p>
+  <a class="ext" href="https://acmicpc.net/problem/10828" target="_blank" rel="noopener">문제 보러 가기 ↗</a>
+  <section><h2>내 풀이</h2><div class="code-card"><div class="code-head"><span>my solution</span><span>python</span></div><div class="hl"><pre><span></span><code><span class="linenos"> 1</span><span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">())</span>
+<span class="linenos"> 2</span><span class="n">l</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="linenos"> 3</span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+<span class="linenos"> 4</span>    <span class="n">l</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">input</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">" "</span><span class="p">))))</span>
+<span class="linenos"> 5</span>
+<span class="linenos"> 6</span><span class="n">s</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)):</span>
+<span class="linenos"> 9</span>    <span class="k">if</span> <span class="n">l</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'push'</span><span class="p">:</span>
+<span class="linenos">10</span>        <span class="n">s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">l</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+<span class="linenos">11</span>    <span class="k">elif</span> <span class="n">l</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'pop'</span><span class="p">:</span>
+<span class="linenos">12</span>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+<span class="linenos">13</span>            <span class="nb">print</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="linenos">14</span>        <span class="k">else</span><span class="p">:</span>
+<span class="linenos">15</span>            <span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">pop</span><span class="p">())</span>
+<span class="linenos">16</span>    <span class="k">elif</span> <span class="n">l</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'size'</span><span class="p">:</span>
+<span class="linenos">17</span>        <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+<span class="linenos">18</span>    <span class="k">elif</span> <span class="n">l</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'empty'</span><span class="p">:</span>
+<span class="linenos">19</span>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+<span class="linenos">20</span>            <span class="nb">print</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="linenos">21</span>        <span class="k">else</span><span class="p">:</span>
+<span class="linenos">22</span>            <span class="nb">print</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="linenos">23</span>    <span class="k">else</span><span class="p">:</span>
+<span class="linenos">24</span>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+<span class="linenos">25</span>            <span class="nb">print</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="linenos">26</span>        <span class="k">else</span><span class="p">:</span>
+<span class="linenos">27</span>            <span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+</code></pre></div>
+</div></section>
+  <section class="card cx-card">
+    <div class="cx-head"><span class="label">시간 복잡도</span>
+      <span class="badge warn">개선 가능</span></div>
+    <div class="cx-big"><mark>O(N)</mark></div>
+    <div class="space"><div><span class="label">내 공간</span><code>O(N)</code></div><div><span class="label">최선 공간</span><code>O(N)</code></div></div>
+    <p>명령마다 append, pop, len이 모두 O(1)이라 전체 O(N)이야. 다만 input()과 print를 1만 번씩 부르면 파이썬에서는 느려질 수 있어. 실제 실행 시간도 220ms가 나왔어.</p>
+  </section>
+  <section><h2>내 풀이 요약</h2><p>명령을 모두 리스트에 저장한 뒤, 리스트 s를 스택으로 써서 명령마다 바로 출력했어.</p></section>
+  <div class="two-col"><section><h2>잘한 점</h2><ul class="plus"><li>파이썬 리스트의 append와 pop을 스택으로 정확히 썼어</li><li>빈 스택일 때 -1, 0, 1 처리를 빠짐없이 했어</li></ul></section><section><h2>코멘트</h2><div class="comment"><strong>대량 입력은 sys.stdin.readline</strong><p>명령이 1만 개라 input() 대신 sys.stdin.readline을 쓰면 훨씬 빨라.</p></div><div class="comment"><strong>출력은 모아서 한 번에</strong><p>결과를 리스트에 모았다가 &#x27;\n&#x27;.join으로 한 번에 출력하면 print 호출이 줄어.</p></div><div class="comment"><strong>map(str, ...)은 필요 없어</strong><p>split()의 결과는 이미 문자열이라 str로 바꿀 필요가 없어.</p></div><div class="comment"><strong>range(len(l)) 대신 직접 순회</strong><p>for cmd in l처럼 바로 돌면 l[i][0]처럼 인덱스를 반복해서 쓰지 않아도 돼.</p></div></section></div>
+  <section><h2>이 문제에서 드러난 약점</h2><div class="card weak-table"><div class="weak-row"><span class="weak-tag">입력 처리</span><span>명령이 많은 문제에서 빠른 입출력을 쓰지 않았어.</span></div></div></section>
+  <section><h2>더 나은 풀이</h2><p>sys.stdin.readline으로 명령을 바로 읽어 처리하고, 출력은 모아서 한 번에 내보내.</p><div class="code-card"><div class="code-head"><span>better · O(N)</span><span>python</span></div><div class="hl"><pre><span></span><code><span class="linenos"> 1</span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="linenos"> 2</span><span class="nb">input</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="o">.</span><span class="n">readline</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">())</span>
+<span class="linenos"> 5</span><span class="n">stack</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="linenos"> 6</span><span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="linenos"> 7</span><span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+<span class="linenos"> 8</span>    <span class="n">cmd</span> <span class="o">=</span> <span class="nb">input</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+<span class="linenos"> 9</span>    <span class="k">if</span> <span class="n">cmd</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'push'</span><span class="p">:</span>
+<span class="linenos">10</span>        <span class="n">stack</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cmd</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="linenos">11</span>    <span class="k">elif</span> <span class="n">cmd</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'pop'</span><span class="p">:</span>
+<span class="linenos">12</span>        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span> <span class="k">if</span> <span class="n">stack</span> <span class="k">else</span> <span class="s1">'-1'</span><span class="p">)</span>
+<span class="linenos">13</span>    <span class="k">elif</span> <span class="n">cmd</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'size'</span><span class="p">:</span>
+<span class="linenos">14</span>        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)))</span>
+<span class="linenos">15</span>    <span class="k">elif</span> <span class="n">cmd</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'empty'</span><span class="p">:</span>
+<span class="linenos">16</span>        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">'0'</span> <span class="k">if</span> <span class="n">stack</span> <span class="k">else</span> <span class="s1">'1'</span><span class="p">)</span>
+<span class="linenos">17</span>    <span class="k">else</span><span class="p">:</span>  <span class="c1"># top</span>
+<span class="linenos">18</span>        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">stack</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">stack</span> <span class="k">else</span> <span class="s1">'-1'</span><span class="p">)</span>
+<span class="linenos">19</span><span class="nb">print</span><span class="p">(</span><span class="s1">'</span><span class="se">\n</span><span class="s1">'</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out</span><span class="p">))</span>
+</code></pre></div>
+</div></section>
+</main>
+<footer class="site-footer"><div class="container">매일 자정, 그날 푼 풀이를 자동으로 분석해서 올려요.</div></footer>
+</body>
+</html>

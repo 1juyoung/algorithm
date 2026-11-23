@@ -1,0 +1,116 @@
+:root{--bg:#f3f4ef;--fg:#172033;--card:#fbfbf8;--primary:#2b4fd8;--on-primary:#fbfbf8;--muted:#e7e9e2;
+--muted-fg:#586173;--hl:#f3e24b;--border:#d6d9d0;--danger:#c23a2b;--r:6px;
+--sans:"IBM Plex Sans KR",system-ui,-apple-system,sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font:16px/1.6 var(--sans);color:var(--fg);background-color:var(--bg);
+background-image:linear-gradient(to right,rgba(214,217,208,.45) 1px,transparent 1px),
+linear-gradient(rgba(214,217,208,.45) 1px,transparent 1px);background-size:24px 24px}
+a{color:inherit;text-decoration:none}
+h1,h2{margin:0;letter-spacing:-.01em}
+p{margin:0}
+.container{max-width:1024px;margin:0 auto;padding:0 20px}
+.site-header{position:sticky;top:0;z-index:10;background:rgba(251,251,248,.85);backdrop-filter:blur(6px);
+border-bottom:1px solid var(--border)}
+.header-inner{display:flex;align-items:center;justify-content:space-between;height:68px}
+.logo{font:700 14px var(--mono)}
+.logo .prompt{color:var(--primary)}
+.header-link{font-size:14px;color:var(--muted-fg)}
+.header-link:hover{color:var(--fg)}
+.site-footer{padding:40px 0 56px;color:var(--muted-fg);font-size:13px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r)}
+mark,.hl-mark{background:linear-gradient(transparent 55%,var(--hl) 55%);color:inherit;padding:0 .08em}
+s{color:var(--muted-fg);text-decoration-thickness:1.5px}
+.arrow{margin:0 .4em;color:var(--muted-fg)}
+
+/* 첫 화면 */
+.home{padding-top:64px;padding-bottom:24px}
+.eyebrow{font:13px var(--mono);color:var(--muted-fg);letter-spacing:.06em}
+.home h1{font-size:48px;line-height:1.25;margin:14px 0 18px}
+.lead{color:var(--muted-fg);max-width:600px;line-height:1.7}
+.weak{margin-top:56px;padding:28px}
+.weak h2{font-size:20px}
+.sub{color:var(--muted-fg);font-size:14px;margin-top:6px}
+.sub strong{color:var(--fg)}
+.bars{margin-top:20px;display:grid;gap:10px}
+.bar-row{display:grid;grid-template-columns:220px 1fr 32px;align-items:center;gap:16px;font-size:14px}
+.bar-track{height:12px;background:var(--muted);border-radius:2px;overflow:hidden}
+.bar-fill{display:block;height:100%;background:var(--primary)}
+.bar-fill.top{background:var(--hl)}
+.bar-num{text-align:right;font-family:var(--mono)}
+.records{margin-top:56px}
+.records h2{font-size:20px;margin-bottom:18px}
+.rec-list{border-top:1px solid var(--border)}
+.rec{display:grid;grid-template-columns:120px 1fr auto;align-items:center;gap:16px;padding:18px 12px;
+border-bottom:1px solid var(--border);transition:background .15s}
+.rec:hover{background:var(--card)}
+.rec-date{font:13px var(--mono);color:var(--muted-fg)}
+.rec-main{display:flex;flex-direction:column;gap:4px;min-width:0}
+.rec-meta{font:12px var(--mono);color:var(--muted-fg)}
+.rec-title{font-size:18px;font-weight:700}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+.chip{font-size:12px;background:var(--muted);border-radius:3px;padding:2px 6px}
+.rec-cx,.cx{font:14px var(--mono);white-space:nowrap}
+.rec-cx mark{font-weight:700}
+.empty{color:var(--muted-fg);padding:24px 0}
+
+/* 상세 화면 */
+.post{max-width:768px;padding-top:40px}
+.back{font-size:14px;color:var(--muted-fg)}
+.back:hover{color:var(--fg)}
+.post-meta{margin-top:36px;font:13px var(--mono);color:var(--muted-fg)}
+.post h1{font-size:34px;margin:6px 0 10px}
+.summary{line-height:1.7}
+.ext{display:inline-block;margin-top:10px;font-size:14px;color:var(--primary)}
+.post section{margin-top:40px}
+.post section h2{font-size:18px;margin-bottom:12px}
+.post section>p{line-height:1.75}
+.post section>p+.code-card{margin-top:14px}
+.code-card{border:1px solid var(--border);border-radius:var(--r);overflow:hidden;background:var(--card)}
+.code-head{display:flex;justify-content:space-between;padding:8px 16px;background:var(--muted);
+font:12px var(--mono);color:var(--muted-fg)}
+.hl pre{margin:0;padding:16px;overflow-x:auto;font:13.5px/1.75 var(--mono);background:var(--card)}
+.hl .linenos{display:inline-block;width:2.2em;margin-right:12px;color:#9aa1ad;text-align:right;user-select:none}
+.cx-card{padding:24px 26px}
+.cx-head{display:flex;justify-content:space-between;align-items:center}
+.label{font:12px var(--mono);color:var(--muted-fg);letter-spacing:.08em}
+.badge{font-size:12px;font-weight:500;border:1px solid var(--fg);border-radius:3px;padding:2px 8px;background:var(--card)}
+.badge.best{border-color:var(--primary);color:var(--primary)}
+.badge.fail{border-color:var(--danger);color:var(--danger)}
+.cx-big{font:700 34px var(--mono);margin:14px 0 18px;padding-bottom:18px;border-bottom:1px solid var(--border);
+max-width:60%;white-space:nowrap}
+.cx-big s{font-weight:500}
+.space{display:grid;grid-template-columns:200px 200px;margin-bottom:16px}
+.space div{display:flex;flex-direction:column;gap:2px}
+.space code{font:14px var(--mono)}
+.cx-card p{line-height:1.75}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.plus{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.plus li{display:grid;grid-template-columns:14px 1fr;gap:8px;line-height:1.6}
+.plus li::before{content:"+";color:var(--primary);font-family:var(--mono)}
+.comment{margin-bottom:14px}
+.comment p{color:var(--muted-fg);line-height:1.65;margin-top:2px}
+.muted{color:var(--muted-fg)}
+.weak-table{overflow:hidden}
+.weak-row{display:grid;grid-template-columns:220px 1fr;gap:16px;padding:16px 18px;border-bottom:1px solid var(--border)}
+.weak-row:last-child{border-bottom:0}
+.weak-tag{font-weight:700;font-size:13px;align-self:start;justify-self:start;
+background:linear-gradient(transparent 55%,var(--hl) 55%)}
+
+/* 코드 색상 */
+.hl .k,.hl .kn,.hl .kd,.hl .kc,.hl .kr,.hl .ow{color:#2b4fd8}
+.hl .s,.hl .s1,.hl .s2,.hl .sa,.hl .se,.hl .si,.hl .sd{color:#1f7a4d}
+.hl .c,.hl .c1,.hl .cm,.hl .ch{color:#8a919e;font-style:italic}
+.hl .mi,.hl .mf,.hl .mh{color:#b35c1e}
+.hl .nb,.hl .bp{color:#6b46c1}
+.hl .nf,.hl .nc{color:#172033;font-weight:700}
+
+@media (max-width:720px){
+.home{padding-top:40px}.home h1{font-size:32px}
+.bar-row{grid-template-columns:120px 1fr 24px;gap:10px}
+.rec{grid-template-columns:1fr;gap:6px}.rec-cx{justify-self:start}
+.two-col{grid-template-columns:1fr;gap:0}
+.weak-row{grid-template-columns:1fr;gap:6px}
+.cx-big{font-size:26px;max-width:100%;white-space:normal}
+.space{grid-template-columns:1fr 1fr}
+}
