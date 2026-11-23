@@ -25,7 +25,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 KST = dt.timezone(dt.timedelta(hours=9))
-DEFAULT_MODEL = "gemini-2.5-flash"
+DEFAULT_MODEL = "gemini-3.8-flash"  # 바꾸려면 레포 Variables에 GEMINI_MODEL 등록
 MAX_PROBLEM_CHARS = 6000
 MAX_CODE_CHARS = 6000
 SOLUTION_EXTS = {".py", ".js", ".ts", ".java", ".cpp", ".cc", ".c", ".kt", ".swift", ".go", ".rs", ".rb", ".cs", ".sql"}
@@ -374,18 +374,28 @@ def main() -> int:
                           "good_points": [], "improvements": [], "better_code": "",
                           "better_code_explanation": ""}
 
+    failed = sum(1 for p in problems if p.analysis.get("verdict") == "분석 실패")
+    if failed == len(problems):
+        print("모든 문제의 분석이 실패해서 글을 올리지 않아요. 위 오류를 확인하세요.", file=sys.stderr)
+        return 1
+
     site = Path(args.site_dir)
     post = site / "_posts" / f"{day.isoformat()}-daily-review.md"
     post.parent.mkdir(parents=True, exist_ok=True)
     post.write_text(render_post(day, problems), encoding="utf-8")
 
     need_work = sum(1 for p in problems if p.analysis.get("verdict") in ("개선 가능", "더 쉬운 풀이 있음"))
+    if need_work:
+        body = f"{len(problems)}문제 중 {need_work}문제에 고칠 점이 있어요."
+    elif failed:
+        body = f"{len(problems)}문제 중 {failed}문제는 분석에 실패했어요."
+    else:
+        body = f"{len(problems)}문제 모두 최선의 풀이예요!"
+    if failed and need_work:
+        body += f" ({failed}문제는 분석 실패)"
     url = f"{args.base_url.rstrip('/')}/reviews/{day.isoformat()}/" if args.base_url else ""
     write_output(post_path=str(post), count=str(len(problems)),
-                 title=f"{label} 코테 분석이 올라왔어요",
-                 body=f"{len(problems)}문제 중 {need_work}문제에 고칠 점이 있어요." if need_work
-                 else f"{len(problems)}문제 모두 최선의 풀이예요!",
-                 url=url)
+                 title=f"{label} 코테 분석이 올라왔어요", body=body, url=url)
     return 0
 
 
