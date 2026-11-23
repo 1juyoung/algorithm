@@ -226,7 +226,10 @@ def build_prompt(p: Problem) -> str:
 - good_points: 잘한 점 1~3개, 짧고 구체적으로
 - comments: 고칠 점 0~4개. title은 짧은 제목, body는 1~2문장. 시간 복잡도, 불필요한 코드, 경계값,
   입력 처리(예: split(" ") 대신 split()), 제출하면 안 되는 디버그 코드(예: sys.stdin = open(...)) 등. 없으면 빈 배열.
-- weaknesses: 이 풀이에서 드러난 약점 0~2개. tag는 정해진 목록에서만 고르고, reason은 1문장. 약점이 없으면 빈 배열.
+- weaknesses: 이 풀이에서 드러난 약점 0~2개. tag는 정해진 목록에서만 고르고, reason은 1문장.
+  실제로 문제가 된 것만 골라: 시간·공간 복잡도를 나쁘게 만들었거나, 풀이를 불필요하게 복잡하게 만든 원인일 때만.
+  변수 이름, 들여쓰기, str(input()) 같은 사소한 것은 comments에만 쓰고 weaknesses에는 넣지 마.
+  verdict가 "최선"이면 반드시 빈 배열.
 - better_summary: verdict가 "최선"이 아니면 더 나은 풀이의 핵심 아이디어 1~2문장, "최선"이면 빈 문자열
 - better_code: verdict가 "최선"이 아니면 더 나은 전체 코드(같은 언어), "최선"이면 빈 문자열
 
@@ -380,6 +383,8 @@ def main() -> int:
             time.sleep(6)  # 무료 티어 분당 요청 제한 여유
         try:
             p.analysis, used = call_gemini_any(build_prompt(p), api_key, models)
+            if p.analysis.get("verdict") == "최선":
+                p.analysis["weaknesses"] = []
             print(f"[{p.title}] {used}로 분석 완료", file=sys.stderr)
             if used != models[0]:  # 성공한 모델을 다음 문제부터 먼저 쓴다
                 models.remove(used)

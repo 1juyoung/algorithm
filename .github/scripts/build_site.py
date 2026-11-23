@@ -24,6 +24,7 @@ SITE_NAME = "1juyoung/algo-notes"
 LEXER = {".py": "python", ".js": "javascript", ".ts": "typescript", ".java": "java", ".cpp": "cpp", ".cc": "cpp",
          ".c": "c", ".kt": "kotlin", ".swift": "swift", ".go": "go", ".rs": "rust", ".rb": "ruby", ".cs": "csharp",
          ".sql": "sql"}
+RECENT = 20  # "내가 자주 막히는 곳"은 최근 N문제의 약점만 센다
 VERDICT_CLASS = {"최선": "best", "개선 가능": "warn", "더 쉬운 풀이 있음": "warn", "분석 실패": "fail"}
 LEGACY = ["_posts", "_config.yml", "index.md", "reviews"]  # 예전 Jekyll 방식의 파일
 
@@ -114,19 +115,25 @@ def meta_line(p: dict, with_date: bool) -> str:
 # ---------------------------------------------------------------------------
 
 def render_index(problems: list[dict]) -> str:
-    counts = Counter(w.get("tag") for p in problems for w in a(p, "weaknesses", []) if w.get("tag"))
-    top = counts.most_common(6)
+    def tag_counts(ps):
+        return Counter(w.get("tag") for p in ps for w in a(p, "weaknesses", []) if w.get("tag"))
+
+    recent = tag_counts(problems[:RECENT])  # problems는 최신순
+    total = tag_counts(problems)
+    top = recent.most_common(6)
 
     if top:
         peak = top[0][1]
         rows = "".join(
             f'<div class="bar-row"><span class="bar-label">{escape(tag)}</span>'
             f'<span class="bar-track"><span class="bar-fill{" top" if i == 0 else ""}" '
-            f'style="width:{n / peak * 100:.0f}%"></span></span><span class="bar-num">{n}</span></div>'
+            f'style="width:{n / peak * 100:.0f}%"></span></span><span class="bar-num">{n}'
+            f'<small>/ {total[tag]}</small></span></div>'
             for i, (tag, n) in enumerate(top))
         weak = (f'<section class="card weak"><h2>내가 자주 막히는 곳</h2>'
                 f'<p class="sub">지금 가장 많이 걸린 건 <strong>{escape(top[0][0])}</strong> — '
-                f'다음 문제는 이 유형으로 골라 보자.</p><div class="bars">{rows}</div></section>')
+                f'다음 문제는 이 유형으로 골라 보자.</p><p class="basis">최근 {RECENT}문제 기준 / 전체 누적</p>'
+                f'<div class="bars">{rows}</div></section>')
     else:
         weak = ('<section class="card weak"><h2>내가 자주 막히는 곳</h2>'
                 '<p class="sub">아직 쌓인 약점이 없어. 문제를 풀면 여기에 모여.</p></section>')
@@ -246,11 +253,13 @@ s{color:var(--muted-fg);text-decoration-thickness:1.5px}
 .sub{color:var(--muted-fg);font-size:14px;margin-top:6px}
 .sub strong{color:var(--fg)}
 .bars{margin-top:20px;display:grid;gap:10px}
-.bar-row{display:grid;grid-template-columns:220px 1fr 32px;align-items:center;gap:16px;font-size:14px}
+.bar-row{display:grid;grid-template-columns:220px 1fr 56px;align-items:center;gap:16px;font-size:14px}
 .bar-track{height:12px;background:var(--muted);border-radius:2px;overflow:hidden}
 .bar-fill{display:block;height:100%;background:var(--primary)}
 .bar-fill.top{background:var(--hl)}
 .bar-num{text-align:right;font-family:var(--mono)}
+.bar-num small{color:var(--muted-fg);font-size:11px;margin-left:3px}
+.basis{font:11px var(--mono);color:var(--muted-fg);margin-top:14px;text-align:right}
 .records{margin-top:56px}
 .records h2{font-size:20px;margin-bottom:18px}
 .rec-list{border-top:1px solid var(--border)}
@@ -320,7 +329,7 @@ background:linear-gradient(transparent 55%,var(--hl) 55%)}
 
 @media (max-width:720px){
 .home{padding-top:40px}.home h1{font-size:32px}
-.bar-row{grid-template-columns:120px 1fr 24px;gap:10px}
+.bar-row{grid-template-columns:110px 1fr 48px;gap:10px}
 .rec{grid-template-columns:1fr;gap:6px}.rec-cx{justify-self:start}
 .two-col{grid-template-columns:1fr;gap:0}
 .weak-row{grid-template-columns:1fr;gap:6px}
