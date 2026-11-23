@@ -38,12 +38,7 @@
             "body": "개수 N은 문자열 길이로 알 수 있어서 따로 저장하지 않아도 돼. 첫 줄은 input()으로 읽고 버려도 충분해."
           }
         ],
-        "weaknesses": [
-          {
-            "tag": "문법 · 내장 함수",
-            "reason": "sum과 map으로 한 줄에 끝나는 계산을 반복문으로 직접 했어."
-          }
-        ],
+        "weaknesses": [],
         "better_summary": "숫자 문자열의 각 글자를 map(int, ...)으로 바꾸고 sum으로 바로 더해.",
         "better_code": "input()\nprint(sum(map(int, input())))\n"
       }
@@ -90,12 +85,7 @@
             "body": "collections.Counter와 most_common(2)를 쓰면 세기와 동점 판단을 바로 할 수 있어."
           }
         ],
-        "weaknesses": [
-          {
-            "tag": "문법 · 내장 함수",
-            "reason": "개수 세기에 바로 쓰는 Counter를 몰라서 직접 구현했어."
-          }
-        ],
+        "weaknesses": [],
         "better_summary": "Counter로 개수를 세고, 가장 많은 두 개의 개수가 같으면 ?를 출력해.",
         "better_code": "from collections import Counter\n\nt = int(input())\nfor _ in range(t):\n    cnt = Counter(input().replace(' ', ''))\n    top = cnt.most_common(2)\n    if len(top) > 1 and top[0][1] == top[1][1]:\n        print('?')\n    else:\n        print(top[0][0])\n"
       }
@@ -141,12 +131,7 @@
             "body": "공백이 두 칸이거나 줄 끝에 공백이 있으면 split(\" \")은 빈 문자열이 생겨서 에러가 나."
           }
         ],
-        "weaknesses": [
-          {
-            "tag": "입력 처리",
-            "reason": "split(\" \")은 입력 공백에 따라 깨질 수 있어."
-          }
-        ],
+        "weaknesses": [],
         "better_summary": "기록을 읽는 즉시 처리하고, 이미 본 소의 위치가 바뀌었을 때만 센 다음 위치를 갱신해.",
         "better_code": "n = int(input())\npos = {}\ncount = 0\nfor _ in range(n):\n    cow, side = map(int, input().split())\n    if cow in pos and pos[cow] != side:\n        count += 1\n    pos[cow] = side\nprint(count)\n"
       }

@@ -49,7 +49,7 @@
   </section>
   <section><h2>내 풀이 요약</h2><p>관찰 기록을 모두 리스트에 저장한 뒤, 소마다 마지막 위치를 딕셔너리에 두고 바뀔 때마다 count를 늘렸어.</p></section>
   <div class="two-col"><section><h2>잘한 점</h2><ul class="plus"><li>소 번호를 키로 마지막 위치를 저장한 자료구조 선택이 좋아</li><li>처음 본 소는 이동으로 세지 않는 경계를 맞게 처리했어</li></ul></section><section><h2>코멘트</h2><div class="comment"><strong>입력을 모아둘 필요 없어</strong><p>기록을 읽자마자 바로 비교하면 nums 리스트가 필요 없어.</p></div><div class="comment"><strong>== None 대신 in</strong><p>키가 있는지는 k in tree로 확인하는 게 파이썬다운 방식이야. None과 비교할 땐 is None을 써.</p></div><div class="comment"><strong>split(&quot; &quot;) 대신 split()</strong><p>공백이 두 칸이거나 줄 끝에 공백이 있으면 split(&quot; &quot;)은 빈 문자열이 생겨서 에러가 나.</p></div></section></div>
-  <section><h2>이 문제에서 드러난 약점</h2><div class="card weak-table"><div class="weak-row"><span class="weak-tag">입력 처리</span><span>split(&quot; &quot;)은 입력 공백에 따라 깨질 수 있어.</span></div></div></section>
+  
   <section><h2>더 나은 풀이</h2><p>기록을 읽는 즉시 처리하고, 이미 본 소의 위치가 바뀌었을 때만 센 다음 위치를 갱신해.</p><div class="code-card"><div class="code-head"><span>better · O(N)</span><span>python</span></div><div class="hl"><pre><span></span><code><span class="linenos">1</span><span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">())</span>
 <span class="linenos">2</span><span class="n">pos</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="linenos">3</span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>

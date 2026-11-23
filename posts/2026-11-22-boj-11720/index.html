@@ -40,7 +40,7 @@
   </section>
   <section><h2>내 풀이 요약</h2><p>숫자 문자열을 한 글자씩 돌면서 int로 바꿔 answer에 더했어.</p></section>
   <div class="two-col"><section><h2>잘한 점</h2><ul class="plus"><li>문자열을 한 글자씩 돌며 숫자로 바꾸는 흐름이 정확해</li><li>입력 크기에 맞는 O(N) 풀이야</li></ul></section><section><h2>코멘트</h2><div class="comment"><strong>str(input())은 필요 없어</strong><p>input()은 이미 문자열을 돌려줘서 str()로 한 번 더 감쌀 필요가 없어.</p></div><div class="comment"><strong>쓰지 않는 변수 n</strong><p>개수 N은 문자열 길이로 알 수 있어서 따로 저장하지 않아도 돼. 첫 줄은 input()으로 읽고 버려도 충분해.</p></div></section></div>
-  <section><h2>이 문제에서 드러난 약점</h2><div class="card weak-table"><div class="weak-row"><span class="weak-tag">문법 · 내장 함수</span><span>sum과 map으로 한 줄에 끝나는 계산을 반복문으로 직접 했어.</span></div></div></section>
+  
   <section><h2>더 나은 풀이</h2><p>숫자 문자열의 각 글자를 map(int, ...)으로 바꾸고 sum으로 바로 더해.</p><div class="code-card"><div class="code-head"><span>better · O(N)</span><span>python</span></div><div class="hl"><pre><span></span><code><span class="linenos">1</span><span class="nb">input</span><span class="p">()</span>
 <span class="linenos">2</span><span class="nb">print</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">input</span><span class="p">())))</span>
 </code></pre></div>

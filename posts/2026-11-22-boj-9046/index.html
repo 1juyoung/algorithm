@@ -56,7 +56,7 @@
   </section>
   <section><h2>내 풀이 요약</h2><p>딕셔너리로 알파벳 개수를 세고, 최댓값이 두 번 이상 나오면 ?, 아니면 그 키를 출력했어.</p></section>
   <div class="two-col"><section><h2>잘한 점</h2><ul class="plus"><li>공백을 continue로 건너뛰어서 세는 대상을 정확히 맞췄어</li><li>get(i, 0) + 1로 개수 세기를 깔끔하게 했어</li><li>count(maxN)으로 동점 여부를 판단한 아이디어가 좋아</li></ul></section><section><h2>코멘트</h2><div class="comment"><strong>max를 두 번 계산할 필요 없어</strong><p>nums에 이미 값 목록이 있으니 max(nums)로 쓰면 돼.</p></div><div class="comment"><strong>출력 줄 들여쓰기</strong><p>print(j)만 6칸 들여쓰기가 섞여 있어. 동작은 하지만 4칸으로 맞추는 게 좋아.</p></div><div class="comment"><strong>Counter를 쓰면 더 짧아</strong><p>collections.Counter와 most_common(2)를 쓰면 세기와 동점 판단을 바로 할 수 있어.</p></div></section></div>
-  <section><h2>이 문제에서 드러난 약점</h2><div class="card weak-table"><div class="weak-row"><span class="weak-tag">문법 · 내장 함수</span><span>개수 세기에 바로 쓰는 Counter를 몰라서 직접 구현했어.</span></div></div></section>
+  
   <section><h2>더 나은 풀이</h2><p>Counter로 개수를 세고, 가장 많은 두 개의 개수가 같으면 ?를 출력해.</p><div class="code-card"><div class="code-head"><span>better · O(T·L)</span><span>python</span></div><div class="hl"><pre><span></span><code><span class="linenos"> 1</span><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
 <span class="linenos"> 2</span>
 <span class="linenos"> 3</span><span class="n">t</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">())</span>

@@ -33,11 +33,13 @@ s{color:var(--muted-fg);text-decoration-thickness:1.5px}
 .sub{color:var(--muted-fg);font-size:14px;margin-top:6px}
 .sub strong{color:var(--fg)}
 .bars{margin-top:20px;display:grid;gap:10px}
-.bar-row{display:grid;grid-template-columns:220px 1fr 32px;align-items:center;gap:16px;font-size:14px}
+.bar-row{display:grid;grid-template-columns:220px 1fr 56px;align-items:center;gap:16px;font-size:14px}
 .bar-track{height:12px;background:var(--muted);border-radius:2px;overflow:hidden}
 .bar-fill{display:block;height:100%;background:var(--primary)}
 .bar-fill.top{background:var(--hl)}
 .bar-num{text-align:right;font-family:var(--mono)}
+.bar-num small{color:var(--muted-fg);font-size:11px;margin-left:3px}
+.basis{font:11px var(--mono);color:var(--muted-fg);margin-top:14px;text-align:right}
 .records{margin-top:56px}
 .records h2{font-size:20px;margin-bottom:18px}
 .rec-list{border-top:1px solid var(--border)}
@@ -107,7 +109,7 @@ background:linear-gradient(transparent 55%,var(--hl) 55%)}
 
 @media (max-width:720px){
 .home{padding-top:40px}.home h1{font-size:32px}
-.bar-row{grid-template-columns:120px 1fr 24px;gap:10px}
+.bar-row{grid-template-columns:110px 1fr 48px;gap:10px}
 .rec{grid-template-columns:1fr;gap:6px}.rec-cx{justify-self:start}
 .two-col{grid-template-columns:1fr;gap:0}
 .weak-row{grid-template-columns:1fr;gap:6px}
