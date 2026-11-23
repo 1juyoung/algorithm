@@ -1,0 +1,78 @@
+name: Daily code review
+
+on:
+  schedule:
+    - cron: "7 15 * * *" # 매일 00:07 KST (UTC 15:07), 전날 푼 문제를 분석
+  workflow_dispatch:
+    inputs:
+      date:
+        description: "분석할 날짜 YYYY-MM-DD (KST). 비우면 어제"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-review
+  cancel-in-progress: false
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    env:
+      HAS_FCM: ${{ secrets.FIREBASE_SERVICE_ACCOUNT != '' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Prepare gh-pages worktree
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git ls-remote --exit-code --heads origin gh-pages > /dev/null; then
+            git worktree add -B gh-pages site origin/gh-pages
+          else
+            git worktree add --orphan -b gh-pages site
+            cp -r .github/blog-template/. site/
+          fi
+
+      - name: Analyze solutions
+        id: review
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: ${{ vars.GEMINI_MODEL }}
+        run: |
+          python .github/scripts/daily_review.py \
+            --date "${{ inputs.date }}" \
+            --site-dir site \
+            --base-url "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}"
+
+      - name: Publish to gh-pages
+        if: steps.review.outputs.post_path != ''
+        run: |
+          cd site
+          git add -A
+          if git diff --cached --quiet; then
+            echo "바뀐 내용이 없어요."
+          else
+            git commit -m "review: ${{ steps.review.outputs.title }}"
+            git push origin gh-pages
+          fi
+
+      - name: Notify (FCM)
+        if: env.HAS_FCM == 'true'
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          FCM_TOPIC: algo
+          NOTIFY_TITLE: ${{ steps.review.outputs.title }}
+          NOTIFY_BODY: ${{ steps.review.outputs.body }}
+          NOTIFY_URL: ${{ steps.review.outputs.url }}
+        run: |
+          pip install --quiet google-auth requests
+          python .github/scripts/notify.py
