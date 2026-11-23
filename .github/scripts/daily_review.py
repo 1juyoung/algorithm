@@ -300,6 +300,19 @@ def fake_analysis(p: Problem) -> dict:
 # 3. 블로그 글 만들기
 # ---------------------------------------------------------------------------
 
+def big_o(text: str) -> str:
+    """'O(T × N) - 설명'에서 'O(T × N)'만 꺼낸다. 괄호가 중첩돼도 맞춘다."""
+    start = text.find("O(")
+    if start < 0:
+        return text.split(" - ")[0].strip()
+    depth = 0
+    for i in range(start + 1, len(text)):
+        depth += {"(": 1, ")": -1}.get(text[i], 0)
+        if depth == 0:
+            return text[start:i + 1]
+    return text[start:].strip()
+
+
 def cell(text: str) -> str:
     return str(text).replace("|", "\\|").replace("\n", " ").strip()
 
@@ -324,8 +337,8 @@ def render_post(day: dt.date, problems: list[Problem]) -> str:
         a = p.analysis
         anchor = f"p-{p.number or abs(hash(p.folder)) % 10**6}"
         lines.append(f"| [{cell(p.title)}](#{anchor}) | {cell(p.site)} {cell(p.tier)} | "
-                     f"{cell(a.get('my_complexity', '').split(' ')[0])} | "
-                     f"{cell(a.get('best_complexity', '').split(' ')[0])} | {cell(a.get('verdict', ''))} |")
+                     f"{cell(big_o(a.get('my_complexity', '')))} | "
+                     f"{cell(big_o(a.get('best_complexity', '')))} | {cell(a.get('verdict', ''))} |")
     for p in problems:
         a = p.analysis
         anchor = f"p-{p.number or abs(hash(p.folder)) % 10**6}"
