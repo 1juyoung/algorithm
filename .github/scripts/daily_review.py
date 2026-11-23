@@ -25,7 +25,10 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 KST = dt.timezone(dt.timedelta(hours=9))
-DEFAULT_MODEL = "gemini-3.8-flash"  # 바꾸려면 레포 Variables에 GEMINI_MODEL 등록
+# 무료 티어(결제 계정 없음)로 쓸 수 있는 텍스트 모델만, 앞에서부터 시도한다.
+# 바꾸려면 레포 Variables에 GEMINI_MODEL을 등록하면 그 모델을 맨 앞에 둔다.
+FREE_MODELS = ["gemini-3.6-flash", "gemini-3.8-flash", "gemini-3.5-flash-lite", "gemini-3.1-flash-lite"]
+DEFAULT_MODEL = FREE_MODELS[0]
 MAX_PROBLEM_CHARS = 6000
 MAX_CODE_CHARS = 6000
 SOLUTION_EXTS = {".py", ".js", ".ts", ".java", ".cpp", ".cc", ".c", ".kt", ".swift", ".go", ".rs", ".rb", ".cs", ".sql"}
@@ -228,28 +231,15 @@ def build_prompt(p: Problem) -> str:
 API_BASE = "https://generativelanguage.googleapis.com/v1beta"
 
 
-def candidate_models(api_key: str, preferred: str) -> list[str]:
-    """선호 모델을 먼저, 그다음 이 키로 쓸 수 있는 다른 텍스트용 flash 모델을 순서대로 돌려준다."""
-    names: list[str] = []
-    try:
-        req = urllib.request.Request(f"{API_BASE}/models?pageSize=200", headers={"x-goog-api-key": api_key})
-        with urllib.request.urlopen(req, timeout=30) as res:
-            for m in json.loads(res.read()).get("models", []):
-                name = m.get("name", "").removeprefix("models/")
-                if ("generateContent" in m.get("supportedGenerationMethods", []) and "flash" in name
-                        and not re.search(r"image|tts|audio|live|embedding|exp", name)):
-                    names.append(name)
-    except (urllib.error.URLError, json.JSONDecodeError, TimeoutError) as e:
-        print(f"모델 목록을 못 가져왔어요: {e}", file=sys.stderr)
-    # 정식 출시 모델 → preview 순, 같은 그룹 안에서는 버전이 높은 것부터
-    names.sort(key=lambda n: ("preview" in n, [-int(x) for x in re.findall(r"\d+", n)]))
-    return [preferred] + [n for n in names if n != preferred]
+def candidate_models(preferred: str) -> list[str]:
+    """선호 모델을 먼저, 그다음 무료 모델을 순서대로 돌려준다."""
+    return [preferred] + [m for m in FREE_MODELS if m != preferred]
 
 
 def call_gemini_any(prompt: str, api_key: str, models: list[str]) -> tuple[dict, str]:
     """앞 모델이 바쁘거나(503/429) 없으면(404) 다음 모델로 넘어간다."""
     errors = []
-    for model in models[:5]:
+    for model in models:
         try:
             return call_gemini(prompt, api_key, model), model
         except RuntimeError as e:
@@ -406,9 +396,9 @@ def main() -> int:
         print("GEMINI_API_KEY가 없어요. --dry-run으로 실행하거나 시크릿을 등록하세요.", file=sys.stderr)
         return 1
 
-    models = [] if args.dry_run else candidate_models(api_key, model)
+    models = [] if args.dry_run else candidate_models(model)
     if models:
-        print(f"사용할 모델 순서: {', '.join(models[:5])}", file=sys.stderr)
+        print(f"사용할 모델 순서: {', '.join(models)}", file=sys.stderr)
     for i, p in enumerate(problems):
         if args.dry_run:
             p.analysis = fake_analysis(p)
