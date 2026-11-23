@@ -225,8 +225,41 @@ def build_prompt(p: Problem) -> str:
 """
 
 
-def call_gemini(prompt: str, api_key: str, model: str, retries: int = 4) -> dict:
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
+API_BASE = "https://generativelanguage.googleapis.com/v1beta"
+
+
+def candidate_models(api_key: str, preferred: str) -> list[str]:
+    """선호 모델을 먼저, 그다음 이 키로 쓸 수 있는 다른 텍스트용 flash 모델을 순서대로 돌려준다."""
+    names: list[str] = []
+    try:
+        req = urllib.request.Request(f"{API_BASE}/models?pageSize=200", headers={"x-goog-api-key": api_key})
+        with urllib.request.urlopen(req, timeout=30) as res:
+            for m in json.loads(res.read()).get("models", []):
+                name = m.get("name", "").removeprefix("models/")
+                if ("generateContent" in m.get("supportedGenerationMethods", []) and "flash" in name
+                        and not re.search(r"image|tts|audio|live|embedding|exp", name)):
+                    names.append(name)
+    except (urllib.error.URLError, json.JSONDecodeError, TimeoutError) as e:
+        print(f"모델 목록을 못 가져왔어요: {e}", file=sys.stderr)
+    # 정식 출시 모델 → preview 순, 같은 그룹 안에서는 버전이 높은 것부터
+    names.sort(key=lambda n: ("preview" in n, [-int(x) for x in re.findall(r"\d+", n)]))
+    return [preferred] + [n for n in names if n != preferred]
+
+
+def call_gemini_any(prompt: str, api_key: str, models: list[str]) -> tuple[dict, str]:
+    """앞 모델이 바쁘거나(503/429) 없으면(404) 다음 모델로 넘어간다."""
+    errors = []
+    for model in models[:5]:
+        try:
+            return call_gemini(prompt, api_key, model), model
+        except RuntimeError as e:
+            errors.append(f"{model}: {e}")
+            print(f"  {model} 실패, 다음 모델 시도 → {str(e)[:120]}", file=sys.stderr)
+    raise RuntimeError(" / ".join(errors)[:600])
+
+
+def call_gemini(prompt: str, api_key: str, model: str, retries: int = 2) -> dict:
+    url = f"{API_BASE}/models/{model}:generateContent"
     payload = {
         "contents": [{"role": "user", "parts": [{"text": prompt}]}],
         "generationConfig": {
@@ -251,7 +284,8 @@ def call_gemini(prompt: str, api_key: str, model: str, retries: int = 4) -> dict
                 break
         except (KeyError, IndexError, json.JSONDecodeError, urllib.error.URLError, TimeoutError) as e:
             last_error = repr(e)
-        time.sleep(15 * (attempt + 1))
+        if attempt < retries - 1:
+            time.sleep(10)
     raise RuntimeError(f"Gemini 호출 실패: {last_error}")
 
 
@@ -359,6 +393,9 @@ def main() -> int:
         print("GEMINI_API_KEY가 없어요. --dry-run으로 실행하거나 시크릿을 등록하세요.", file=sys.stderr)
         return 1
 
+    models = [] if args.dry_run else candidate_models(api_key, model)
+    if models:
+        print(f"사용할 모델 순서: {', '.join(models[:5])}", file=sys.stderr)
     for i, p in enumerate(problems):
         if args.dry_run:
             p.analysis = fake_analysis(p)
@@ -366,7 +403,11 @@ def main() -> int:
         if i:
             time.sleep(6)  # 무료 티어 분당 요청 제한 여유
         try:
-            p.analysis = call_gemini(build_prompt(p), api_key, model)
+            p.analysis, used = call_gemini_any(build_prompt(p), api_key, models)
+            print(f"[{p.title}] {used}로 분석 완료", file=sys.stderr)
+            if used != models[0]:  # 성공한 모델을 다음 문제부터 먼저 쓴다
+                models.remove(used)
+                models.insert(0, used)
         except RuntimeError as e:
             print(f"[{p.title}] {e}", file=sys.stderr)
             p.analysis = {"verdict": "분석 실패", "my_complexity": "-", "best_complexity": "-",

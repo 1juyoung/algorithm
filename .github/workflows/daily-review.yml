@@ -20,6 +20,7 @@ concurrency:
 jobs:
   review:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     env:
       HAS_FCM: ${{ secrets.FIREBASE_SERVICE_ACCOUNT != '' }}
     steps:
