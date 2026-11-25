@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f3f4ef">
+<title>백준 25501 재귀의 귀재 · 1juyoung의 알고리즘 노트</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="logo" href="../../"><span class="prompt">&gt;</span> 1juyoung/algo-notes</a>
+    <a class="header-link" href="https://github.com/1juyoung/algorithm" target="_blank" rel="noopener">GitHub ↗</a>
+  </div>
+</header>
+<main class="container post">
+  <a class="back" href="../../">← 목록으로</a>
+  <p class="post-meta">2026-11-25 · 백준 25501 · Bronze II</p>
+  <h1>재귀의 귀재</h1>
+  <p class="summary">주어진 문자열이 팰린드롬인지 판별하고 재귀 함수 호출 횟수를 구하는 문제야. (테스트케이스 T 최대 1,000, 문자열 길이 최대 1,000)</p>
+  <a class="ext" href="https://acmicpc.net/problem/25501" target="_blank" rel="noopener">문제 보러 가기 ↗</a>
+  <div class="approach"><span class="label">푸는 방법</span><p>이 문제는 재귀 함수를 이용해 양 끝에서부터 문자를 비교하며 팰린드롬 여부를 판별하고, 호출 횟수를 카운트하는 문제야.</p></div>
+  <section><h2>내 풀이</h2><div class="code-card"><div class="code-head"><span>my solution</span><span>python</span></div><div class="hl"><pre><span></span><code><span class="linenos"> 1</span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="k">def</span><span class="w"> </span><span class="nf">recursion</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+<span class="linenos"> 4</span>    <span class="k">global</span> <span class="n">count</span>
+<span class="linenos"> 5</span>    <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="linenos"> 6</span>    <span class="k">if</span> <span class="n">l</span> <span class="o">&gt;=</span> <span class="n">r</span><span class="p">:</span>
+<span class="linenos"> 7</span>        <span class="k">return</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'1 </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="linenos"> 8</span>    <span class="k">elif</span> <span class="n">s</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">!=</span> <span class="n">s</span><span class="p">[</span><span class="n">r</span><span class="p">]:</span>
+<span class="linenos"> 9</span>        <span class="k">return</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'0 </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="linenos">10</span>    <span class="k">else</span><span class="p">:</span>
+<span class="linenos">11</span>        <span class="k">return</span> <span class="n">recursion</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">r</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+<span class="linenos">12</span>
+<span class="linenos">13</span>
+<span class="linenos">14</span><span class="k">def</span><span class="w"> </span><span class="nf">isPalindrome</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+<span class="linenos">15</span>    <span class="k">return</span> <span class="n">recursion</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+<span class="linenos">16</span>
+<span class="linenos">17</span><span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">())</span>  <span class="c1"># 테스트 케이스 개수</span>
+<span class="linenos">18</span>
+<span class="linenos">19</span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+<span class="linenos">20</span>    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="linenos">21</span>    <span class="n">st</span> <span class="o">=</span> <span class="nb">input</span><span class="p">()</span>
+<span class="linenos">22</span>    <span class="n">isPalindrome</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
+</code></pre></div>
+</div></section>
+  <section class="judge ok"><div class="judge-head"><h2>내 풀이는?</h2><span class="judge-mark ok">✓ 방향 맞음</span></div><p>맞아, 문제에서 제시한 재귀 구조를 그대로 구현해서 풀었어.</p></section>
+  <section class="card cx-card">
+    <div class="cx-head"><span class="label">시간 복잡도</span>
+      <span class="badge best">최선</span></div>
+    <div class="cx-big"><mark>O(T * |S|)</mark></div>
+    <div class="space"><div><span class="label">내 공간</span><code>O(|S|)</code></div><div><span class="label">최선 공간</span><code>O(|S|)</code></div></div>
+    <p>문자열 길이의 절반만큼 재귀 호출을 하므로 각 테스트케이스마다 O(|S|)의 시간이 걸리고, 전체 테스트케이스 T개를 곱하면 최대 약 1,000 * 500 = 50만 번의 연산으로 충분히 통과해.</p>
+  </section>
+  <div class="two-col"><section><h2>잘한 점</h2><ul class="plus"><li>문제에서 요구하는 재귀 함수 구조와 로직을 정확하게 코드로 구현했어.</li><li>테스트케이스마다 전역 변수 count를 0으로 잘 초기화했어.</li></ul></section><section><h2>코멘트</h2><p class=muted>고칠 점이 없어.</p></section></div>
+  
+  
+</main>
+<footer class="site-footer"><div class="container">매일 자정, 그날 푼 풀이를 자동으로 분석해서 올려요.</div></footer>
+</body>
+</html>

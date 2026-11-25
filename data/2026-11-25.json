@@ -1,0 +1,116 @@
+{
+  "date": "2026-11-25",
+  "problems": [
+    {
+      "slug": "2026-11-25-boj-5430",
+      "date": "2026-11-25",
+      "title": "AC",
+      "tier": "Gold V",
+      "number": "5430",
+      "link": "https://acmicpc.net/problem/5430",
+      "site": "백준",
+      "language": "Python",
+      "categories": "덱, 자료 구조, 구현, 파싱, 문자열",
+      "performance": "메모리: 24384 KB, 시간: 124 ms",
+      "code": "from collections import deque\nn = int(input())\nout = []\n\nfor _ in range(n):\n    p = input().strip()\n    t = int(input())\n    s = input().strip()\n\n    l = deque(s[1:-1].split(',')) if t > 0 else deque()\n    rev = False  # 지금 뒤집힌 상태인지만 기억\n    error = False\n\n    for c in p:\n        if c == 'R':\n            rev = not rev\n        else:\n            if not l:\n                error = True\n                break\n            if rev:\n                l.pop()  # 뒤집힌 상태면 '앞'은 실제로는 뒤쪽\n            else:\n                l.popleft()\n\n    if error:\n        out.append('error')\n    else:\n        if rev:\n            l.reverse()  # 마지막에 한 번만 실제로 뒤집기\n        out.append('[' + ','.join(l) + ']')\n\nprint('\\n'.join(out))",
+      "code_ext": ".py",
+      "folder": "Python/백준/Gold/5430. AC",
+      "analysis": {
+        "problem_summary": "수행할 함수 문자열(R: 뒤집기, D: 버리기)과 초기 배열이 주어질 때 최종 연산 결과 또는 에러 여부를 구하는 문제야.",
+        "intended_approach": "이 문제는 덱(deque)과 뒤집힘 상태를 나타내는 플래그로 푸는 문제야. 매번 실제로 뒤집지 않고 상태 플래그를 반전시킨 뒤, 뒤집힌 상태면 pop(), 원래 상태면 popleft()를 수행하고 마지막에 필요할 때만 뒤집는 것이 핵심이야.",
+        "approach_match": true,
+        "verdict": "최선",
+        "my_time": "O(|p| + n)",
+        "best_time": "O(|p| + n)",
+        "my_space": "O(n)",
+        "best_space": "O(n)",
+        "complexity_note": "각 테스트 케이스마다 함수 문자열 p를 순회하면서 O(1) 덱 연산을 수행하고, 마지막에 최대 n개의 원소를 출력 문자열로 만들어. 전체 테스트 케이스의 |p|와 n의 합이 최대 700,000이므로 총 연산 횟수는 100만 번 안팎으로 제한 시간(1초) 내에 매우 여유롭게 통과해.",
+        "summary": "맞아, R 연산을 매번 수행하지 않고 불리언 플래그와 덱(deque)을 조합해서 아주 정석적으로 풀었어.",
+        "good_points": [
+          "매번 배열을 뒤집지 않고 rev 플래그로 O(1)에 방향을 전환한 점",
+          "deque의 popleft()와 pop()을 상황에 맞춰 활용해 버리기 연산을 O(1)에 처리한 점",
+          "t == 0인 예외 상황에서 빈 deque를 안전하게 생성해 빈 문자열 파싱 오류를 방지한 점"
+        ],
+        "comments": [
+          {
+            "title": "빠른 입출력 활용 권장",
+            "body": "지금도 시간 내에 잘 통과했지만, 입력 데이터가 최대 70만 줄 규모로 커질 수 있어서 input() 대신 sys.stdin.readline을 습관화해두면 훨씬 안전해."
+          }
+        ],
+        "weaknesses": [],
+        "better_summary": "",
+        "better_code": ""
+      }
+    },
+    {
+      "slug": "2026-11-25-boj-27433",
+      "date": "2026-11-25",
+      "title": "팩토리얼 2",
+      "tier": "Bronze V",
+      "number": "27433",
+      "link": "https://acmicpc.net/problem/27433",
+      "site": "백준",
+      "language": "Python",
+      "categories": "사칙연산, 수학",
+      "performance": "메모리: 13728 KB, 시간: 29 ms",
+      "code": "def fac(t):\n    if t <= 1:\n        return 1\n\n    return t * fac(t-1)\n\n\nn = int(input())\nprint(fac(n))",
+      "code_ext": ".py",
+      "folder": "Python/백준/Bronze/27433. 팩토리얼 2",
+      "analysis": {
+        "problem_summary": "0부터 20까지의 정수 N이 주어질 때 N!을 구하는 문제야.",
+        "intended_approach": "이 문제는 재귀 함수나 반복문을 사용해 팩토리얼을 계산하는 문제야.",
+        "approach_match": true,
+        "verdict": "최선",
+        "my_time": "O(N)",
+        "best_time": "O(N)",
+        "my_space": "O(N)",
+        "best_space": "O(1)",
+        "complexity_note": "N 최대 20으로 연산 횟수가 매우 적어 재귀 호출에 따른 스택 공간은 O(N)이지만 시간과 공간 모두 넉넉하게 통과해.",
+        "summary": "맞아, 재귀 함수로 깔끔하게 잘 풀었어.",
+        "good_points": [
+          "팩토리얼 정의에 맞게 재귀 함수를 간결하게 잘 짰어.",
+          "0!이 입력될 때의 기저 조건(t <= 1)을 잘 처리했어."
+        ],
+        "comments": [],
+        "weaknesses": [],
+        "better_summary": "",
+        "better_code": ""
+      }
+    },
+    {
+      "slug": "2026-11-25-boj-25501",
+      "date": "2026-11-25",
+      "title": "재귀의 귀재",
+      "tier": "Bronze II",
+      "number": "25501",
+      "link": "https://acmicpc.net/problem/25501",
+      "site": "백준",
+      "language": "Python",
+      "categories": "구현, 재귀, 문자열",
+      "performance": "메모리: 13728 KB, 시간: 300 ms",
+      "code": "count = 0\n\ndef recursion(s, l, r):\n    global count\n    count += 1\n    if l >= r:\n        return print(f'1 {count}')\n    elif s[l] != s[r]:\n        return print(f'0 {count}')\n    else:\n        return recursion(s, l + 1, r - 1)\n\n\ndef isPalindrome(s):\n    return recursion(s, 0, len(s) - 1)\n\nn = int(input())  # 테스트 케이스 개수\n\nfor i in range(n):\n    count = 0\n    st = input()\n    isPalindrome(st)",
+      "code_ext": ".py",
+      "folder": "Python/백준/Bronze/25501. 재귀의 귀재",
+      "analysis": {
+        "problem_summary": "주어진 문자열이 팰린드롬인지 판별하고 재귀 함수 호출 횟수를 구하는 문제야. (테스트케이스 T 최대 1,000, 문자열 길이 최대 1,000)",
+        "intended_approach": "이 문제는 재귀 함수를 이용해 양 끝에서부터 문자를 비교하며 팰린드롬 여부를 판별하고, 호출 횟수를 카운트하는 문제야.",
+        "approach_match": true,
+        "verdict": "최선",
+        "my_time": "O(T * |S|)",
+        "best_time": "O(T * |S|)",
+        "my_space": "O(|S|)",
+        "best_space": "O(|S|)",
+        "complexity_note": "문자열 길이의 절반만큼 재귀 호출을 하므로 각 테스트케이스마다 O(|S|)의 시간이 걸리고, 전체 테스트케이스 T개를 곱하면 최대 약 1,000 * 500 = 50만 번의 연산으로 충분히 통과해.",
+        "summary": "맞아, 문제에서 제시한 재귀 구조를 그대로 구현해서 풀었어.",
+        "good_points": [
+          "문제에서 요구하는 재귀 함수 구조와 로직을 정확하게 코드로 구현했어.",
+          "테스트케이스마다 전역 변수 count를 0으로 잘 초기화했어."
+        ],
+        "comments": [],
+        "weaknesses": [],
+        "better_summary": "",
+        "better_code": ""
+      }
+    }
+  ]
+}

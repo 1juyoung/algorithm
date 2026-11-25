@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f3f4ef">
+<title>백준 5430 AC · 1juyoung의 알고리즘 노트</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="logo" href="../../"><span class="prompt">&gt;</span> 1juyoung/algo-notes</a>
+    <a class="header-link" href="https://github.com/1juyoung/algorithm" target="_blank" rel="noopener">GitHub ↗</a>
+  </div>
+</header>
+<main class="container post">
+  <a class="back" href="../../">← 목록으로</a>
+  <p class="post-meta">2026-11-25 · 백준 5430 · Gold V</p>
+  <h1>AC</h1>
+  <p class="summary">수행할 함수 문자열(R: 뒤집기, D: 버리기)과 초기 배열이 주어질 때 최종 연산 결과 또는 에러 여부를 구하는 문제야.</p>
+  <a class="ext" href="https://acmicpc.net/problem/5430" target="_blank" rel="noopener">문제 보러 가기 ↗</a>
+  <div class="approach"><span class="label">푸는 방법</span><p>이 문제는 덱(deque)과 뒤집힘 상태를 나타내는 플래그로 푸는 문제야. 매번 실제로 뒤집지 않고 상태 플래그를 반전시킨 뒤, 뒤집힌 상태면 pop(), 원래 상태면 popleft()를 수행하고 마지막에 필요할 때만 뒤집는 것이 핵심이야.</p></div>
+  <section><h2>내 풀이</h2><div class="code-card"><div class="code-head"><span>my solution</span><span>python</span></div><div class="hl"><pre><span></span><code><span class="linenos"> 1</span><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">deque</span>
+<span class="linenos"> 2</span><span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">())</span>
+<span class="linenos"> 3</span><span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+<span class="linenos"> 6</span>    <span class="n">p</span> <span class="o">=</span> <span class="nb">input</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+<span class="linenos"> 7</span>    <span class="n">t</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">())</span>
+<span class="linenos"> 8</span>    <span class="n">s</span> <span class="o">=</span> <span class="nb">input</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span>    <span class="n">l</span> <span class="o">=</span> <span class="n">deque</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">','</span><span class="p">))</span> <span class="k">if</span> <span class="n">t</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">deque</span><span class="p">()</span>
+<span class="linenos">11</span>    <span class="n">rev</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># 지금 뒤집힌 상태인지만 기억</span>
+<span class="linenos">12</span>    <span class="n">error</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="linenos">13</span>
+<span class="linenos">14</span>    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">p</span><span class="p">:</span>
+<span class="linenos">15</span>        <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="s1">'R'</span><span class="p">:</span>
+<span class="linenos">16</span>            <span class="n">rev</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">rev</span>
+<span class="linenos">17</span>        <span class="k">else</span><span class="p">:</span>
+<span class="linenos">18</span>            <span class="k">if</span> <span class="ow">not</span> <span class="n">l</span><span class="p">:</span>
+<span class="linenos">19</span>                <span class="n">error</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="linenos">20</span>                <span class="k">break</span>
+<span class="linenos">21</span>            <span class="k">if</span> <span class="n">rev</span><span class="p">:</span>
+<span class="linenos">22</span>                <span class="n">l</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>  <span class="c1"># 뒤집힌 상태면 '앞'은 실제로는 뒤쪽</span>
+<span class="linenos">23</span>            <span class="k">else</span><span class="p">:</span>
+<span class="linenos">24</span>                <span class="n">l</span><span class="o">.</span><span class="n">popleft</span><span class="p">()</span>
+<span class="linenos">25</span>
+<span class="linenos">26</span>    <span class="k">if</span> <span class="n">error</span><span class="p">:</span>
+<span class="linenos">27</span>        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">'error'</span><span class="p">)</span>
+<span class="linenos">28</span>    <span class="k">else</span><span class="p">:</span>
+<span class="linenos">29</span>        <span class="k">if</span> <span class="n">rev</span><span class="p">:</span>
+<span class="linenos">30</span>            <span class="n">l</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>  <span class="c1"># 마지막에 한 번만 실제로 뒤집기</span>
+<span class="linenos">31</span>        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">'['</span> <span class="o">+</span> <span class="s1">','</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="o">+</span> <span class="s1">']'</span><span class="p">)</span>
+<span class="linenos">32</span>
+<span class="linenos">33</span><span class="nb">print</span><span class="p">(</span><span class="s1">'</span><span class="se">\n</span><span class="s1">'</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out</span><span class="p">))</span>
+</code></pre></div>
+</div></section>
+  <section class="judge ok"><div class="judge-head"><h2>내 풀이는?</h2><span class="judge-mark ok">✓ 방향 맞음</span></div><p>맞아, R 연산을 매번 수행하지 않고 불리언 플래그와 덱(deque)을 조합해서 아주 정석적으로 풀었어.</p></section>
+  <section class="card cx-card">
+    <div class="cx-head"><span class="label">시간 복잡도</span>
+      <span class="badge best">최선</span></div>
+    <div class="cx-big"><mark>O(|p| + n)</mark></div>
+    <div class="space"><div><span class="label">내 공간</span><code>O(n)</code></div><div><span class="label">최선 공간</span><code>O(n)</code></div></div>
+    <p>각 테스트 케이스마다 함수 문자열 p를 순회하면서 O(1) 덱 연산을 수행하고, 마지막에 최대 n개의 원소를 출력 문자열로 만들어. 전체 테스트 케이스의 |p|와 n의 합이 최대 700,000이므로 총 연산 횟수는 100만 번 안팎으로 제한 시간(1초) 내에 매우 여유롭게 통과해.</p>
+  </section>
+  <div class="two-col"><section><h2>잘한 점</h2><ul class="plus"><li>매번 배열을 뒤집지 않고 rev 플래그로 O(1)에 방향을 전환한 점</li><li>deque의 popleft()와 pop()을 상황에 맞춰 활용해 버리기 연산을 O(1)에 처리한 점</li><li>t == 0인 예외 상황에서 빈 deque를 안전하게 생성해 빈 문자열 파싱 오류를 방지한 점</li></ul></section><section><h2>코멘트</h2><div class="comment"><strong>빠른 입출력 활용 권장</strong><p>지금도 시간 내에 잘 통과했지만, 입력 데이터가 최대 70만 줄 규모로 커질 수 있어서 input() 대신 sys.stdin.readline을 습관화해두면 훨씬 안전해.</p></div></section></div>
+  
+  
+</main>
+<footer class="site-footer"><div class="container">매일 자정, 그날 푼 풀이를 자동으로 분석해서 올려요.</div></footer>
+</body>
+</html>
